@@ -1,0 +1,197 @@
+/**
+ * Scrapwala Global Styles
+ * Design system tokens from Stitch (Customer Web Portal project)
+ * merged with shadcn/ui required CSS variables.
+ *
+ * Color palette:
+ * - Primary (Mint): #0F8A5F — actions, CTAs, brand identity
+ * - Secondary (Ink): #11201C — text, headers, structure
+ * - Tertiary (Amber): #F4B740 — highlights, payout values, trust markers
+ * - Background: #ECFDF7 — soft mint-white background
+ * - Surface: white cards on mint background
+ */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ================================================================
+   CSS Custom Properties — Stitch Design Tokens + shadcn/ui
+   ================================================================ */
+:root {
+  /* ---- shadcn/ui required variables (mapped to Stitch palette) ---- */
+  --background: #ECFDF7;
+  --foreground: #101E1B;
+  --card: #FFFFFF;
+  --card-foreground: #101E1B;
+  --popover: #FFFFFF;
+  --popover-foreground: #101E1B;
+  --primary: #0F8A5F;
+  --primary-foreground: #FFFFFF;
+  --secondary: #52625D;
+  --secondary-foreground: #FFFFFF;
+  --muted: #E1F2EC;
+  --muted-foreground: #3E4942;
+  --accent: #E1F2EC;
+  --accent-foreground: #101E1B;
+  --destructive: #BA1A1A;
+  --border: #BDCAC0;
+  --input: #BDCAC0;
+  --ring: #0F8A5F;
+  --radius: 0.5rem;
+  --chart-1: #0F8A5F;
+  --chart-2: #F4B740;
+  --chart-3: #52625D;
+  --chart-4: #72DAA9;
+  --chart-5: #7A5500;
+
+  /* ---- Extended Stitch design tokens ---- */
+  --primary-container: #00855B;
+  --primary-fixed: #8EF7C4;
+  --primary-fixed-dim: #72DAA9;
+  --on-primary: #FFFFFF;
+  --on-primary-container: #F5FFF6;
+
+  --secondary-container: #D2E4DD;
+  --on-secondary: #FFFFFF;
+
+  --tertiary: #7A5500;
+  --tertiary-container: #996C00;
+  --tertiary-highlight: #F4B740;
+  --on-tertiary: #FFFFFF;
+
+  --surface: #ECFDF7;
+  --surface-bright: #ECFDF7;
+  --surface-dim: #CDDED8;
+  --surface-container: #E1F2EC;
+  --surface-container-high: #DBECE6;
+  --surface-container-highest: #D5E6E0;
+  --surface-container-low: #E6F7F1;
+  --surface-container-lowest: #FFFFFF;
+
+  --on-surface: #101E1B;
+  --on-surface-variant: #3E4942;
+
+  --inverse-surface: #253330;
+  --inverse-on-surface: #E4F5EE;
+  --inverse-primary: #72DAA9;
+
+  --outline: #6E7A72;
+  --outline-variant: #BDCAC0;
+
+  --error: #BA1A1A;
+  --error-container: #FFDAD6;
+  --on-error: #FFFFFF;
+  --on-error-container: #93000A;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(16, 30, 27, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 138, 95, 0.08);
+  --shadow-lg: 0 8px 24px rgba(15, 138, 95, 0.12);
+}
+
+/* ================================================================
+   Tailwind v4 Theme Inline — Maps CSS vars to Tailwind utilities
+   ================================================================ */
+@theme inline {
+  /* Stitch extended colors */
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-primary-fixed-dim: var(--primary-fixed-dim);
+  --color-on-primary: var(--on-primary);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary: var(--on-secondary);
+
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-tertiary-highlight: var(--tertiary-highlight);
+  --color-on-tertiary: var(--on-tertiary);
+
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+
+  --color-foreground: var(--foreground);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+  --color-inverse-primary: var(--inverse-primary);
+
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+
+  --color-error: var(--error);
+  --color-error-container: var(--error-container);
+  --color-on-error: var(--on-error);
+  --color-on-error-container: var(--on-error-container);
+
+  /* Fonts — loaded via next/font in layout.tsx */
+  --font-heading: var(--font-inter);
+  --font-body: var(--font-inter);
+  --font-label: var(--font-public-sans);
+
+  /* Shadows */
+  --shadow-card: var(--shadow-md);
+}
+
+/* ================================================================
+   Base Styles
+   ================================================================ */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ================================================================
+   Scrollbar Styling
+   ================================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-container);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--outline);
+}
+
+/* ================================================================
+   Focus Styles (accessibility)
+   ================================================================ */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ================================================================
+   Selection Styling
+   ================================================================ */
+::selection {
+  background-color: var(--primary-fixed);
+  color: var(--on-surface);
+}
