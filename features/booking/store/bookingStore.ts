@@ -40,17 +40,17 @@ export interface CustomerData {
   customer_notes: string;
 }
 
-/** Approx price range options */
-export const PRICE_RANGES = [
-  { label: '₹100 – ₹500', min: 100, max: 500 },
-  { label: '₹500 – ₹1,000', min: 500, max: 1000 },
-  { label: '₹1,000 – ₹3,000', min: 1000, max: 3000 },
-  { label: '₹3,000 – ₹5,000', min: 3000, max: 5000 },
-  { label: '₹5,000 – ₹10,000', min: 5000, max: 10000 },
-  { label: '₹10,000+', min: 10000, max: 50000 },
+/** Approx scrap weight range options (in kg) */
+export const WEIGHT_RANGES = [
+  { label: '1 – 5 kg', min: 1, max: 5 },
+  { label: '5 – 15 kg', min: 5, max: 15 },
+  { label: '15 – 30 kg', min: 15, max: 30 },
+  { label: '30 – 50 kg', min: 30, max: 50 },
+  { label: '50 – 100 kg', min: 50, max: 100 },
+  { label: '100+ kg', min: 100, max: 500 },
 ] as const;
 
-export interface PriceRange {
+export interface WeightRange {
   label: string;
   min: number;
   max: number;
@@ -63,8 +63,8 @@ interface BookingStore {
   /** Step 1: Selected scrap items */
   selectedItems: SelectedScrapItem[];
 
-  /** Approx price range selected by user */
-  priceRange: PriceRange | null;
+  /** Approx weight range selected by user */
+  weightRange: WeightRange | null;
 
   /** Step 2: Schedule */
   schedule: ScheduleData | null;
@@ -86,8 +86,8 @@ interface BookingStore {
   updateItemWeight: (scrapItemId: string, weight: number) => void;
   clearItems: () => void;
 
-  /** Price range action */
-  setPriceRange: (range: PriceRange | null) => void;
+  /** Weight range action */
+  setWeightRange: (range: WeightRange | null) => void;
 
   /** Step 2 actions */
   setSchedule: (schedule: ScheduleData) => void;
@@ -113,7 +113,7 @@ const initialCustomer: CustomerData = {
 export const useBookingStore = create<BookingStore>((set, get) => ({
   currentStep: 1,
   selectedItems: [],
-  priceRange: null,
+  weightRange: null,
   schedule: null,
   customer: { ...initialCustomer },
   estimatedValue: 0,
@@ -144,11 +144,11 @@ export const useBookingStore = create<BookingStore>((set, get) => ({
       return { selectedItems: newItems };
     }),
 
-  clearItems: () => set({ selectedItems: [], estimatedValue: 0, priceRange: null }),
+  clearItems: () => set({ selectedItems: [], estimatedValue: 0, weightRange: null }),
 
-  setPriceRange: (range) =>
+  setWeightRange: (range) =>
     set({
-      priceRange: range,
+      weightRange: range,
       estimatedValue: range ? (range.min + range.max) / 2 : 0,
     }),
 
@@ -161,7 +161,7 @@ export const useBookingStore = create<BookingStore>((set, get) => ({
     set({
       currentStep: 1,
       selectedItems: [],
-      priceRange: null,
+      weightRange: null,
       schedule: null,
       customer: { ...initialCustomer },
       estimatedValue: 0,

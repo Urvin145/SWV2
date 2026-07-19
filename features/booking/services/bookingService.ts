@@ -4,7 +4,7 @@
  */
 
 import { createClient } from '@/services/supabase/client';
-import type { SelectedScrapItem, ScheduleData, CustomerData, PriceRange } from '@/features/booking/store/bookingStore';
+import type { SelectedScrapItem, ScheduleData, CustomerData, WeightRange } from '@/features/booking/store/bookingStore';
 
 export interface SlotWithAvailability {
   id: string;
@@ -22,7 +22,7 @@ export interface CreateBookingPayload {
   customer: CustomerData;
   schedule: ScheduleData;
   items: SelectedScrapItem[];
-  priceRange?: PriceRange | null;
+  priceRange?: WeightRange | null;
 }
 
 export interface BookingResult {
@@ -65,8 +65,8 @@ export async function createBooking(payload: CreateBookingPayload): Promise<Book
     estimated_price_range: payload.priceRange
       ? `${payload.priceRange.label}`
       : undefined,
-    estimated_price_min: payload.priceRange?.min,
-    estimated_price_max: payload.priceRange?.max,
+    estimated_weight_min: payload.priceRange?.min,
+    estimated_weight_max: payload.priceRange?.max,
     items: payload.items.map((item) => ({
       scrap_item_id: item.scrap_item_id,
       estimated_weight: item.estimated_weight,

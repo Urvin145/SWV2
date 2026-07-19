@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Check, IndianRupee } from 'lucide-react';
 import { useRates } from '@/features/rates/hooks/useRates';
 import { useCategories } from '@/features/rates/hooks/useCategories';
-import { useBookingStore, type SelectedScrapItem, PRICE_RANGES } from '@/features/booking/store/bookingStore';
+import { useBookingStore, type SelectedScrapItem, WEIGHT_RANGES } from '@/features/booking/store/bookingStore';
 import { cn } from '@/lib/utils';
 
 /** Item-specific emoji mapping */
@@ -31,7 +31,7 @@ export function ScrapSelector() {
   const [activeCategory, setActiveCategory] = useState('all');
   const { data: rates = [], isLoading: ratesLoading } = useRates(activeCategory);
   const { data: categories = [], isLoading: catsLoading } = useCategories();
-  const { selectedItems, addItem, removeItem, priceRange, setPriceRange, nextStep } = useBookingStore();
+  const { selectedItems, addItem, removeItem, weightRange, setWeightRange, nextStep } = useBookingStore();
 
   const allCats = useMemo(() => [{ slug: 'all', name: 'All' }, ...categories], [categories]);
 
@@ -55,7 +55,7 @@ export function ScrapSelector() {
     }
   };
 
-  const canProceed = selectedItems.length > 0 && priceRange !== null;
+  const canProceed = selectedItems.length > 0 && weightRange !== null;
 
   return (
     <div>
@@ -178,21 +178,21 @@ export function ScrapSelector() {
               <div className="mb-4 flex items-center gap-2">
                 <IndianRupee className="h-4 w-4 text-primary" />
                 <h3 className="text-sm font-semibold text-on-surface">
-                  Approximate Value of Your Scrap
+                  Approximate Weight of Your Scrap
                 </h3>
               </div>
               <p className="mb-4 text-xs text-on-surface-variant">
-                Select an estimated price range. This helps us send the right pickup vehicle.
+                Select an estimated weight range. This helps us send the right pickup vehicle.
               </p>
 
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {PRICE_RANGES.map((range) => {
-                  const isActive = priceRange?.label === range.label;
+                {WEIGHT_RANGES.map((range) => {
+                  const isActive = weightRange?.label === range.label;
                   return (
                     <button
                       key={range.label}
                       type="button"
-                      onClick={() => setPriceRange(isActive ? null : { ...range })}
+                      onClick={() => setWeightRange(isActive ? null : { ...range })}
                       className={cn(
                         'rounded-xl border-2 px-3 py-3 text-sm font-medium transition-all text-center',
                         isActive
@@ -216,9 +216,9 @@ export function ScrapSelector() {
           <p className="text-sm text-on-surface-variant">
             <strong className="text-on-surface">{selectedItems.length}</strong> item{selectedItems.length !== 1 ? 's' : ''} selected
           </p>
-          {priceRange && (
+          {weightRange && (
             <p className="text-sm font-semibold text-primary">
-              Approx: {priceRange.label}
+              Approx: {weightRange.label}
             </p>
           )}
         </div>

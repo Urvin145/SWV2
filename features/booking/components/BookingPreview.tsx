@@ -18,7 +18,7 @@ import { ROUTES } from '@/constants/routes';
 
 export function BookingPreview() {
   const router = useRouter();
-  const { selectedItems, schedule, customer, priceRange, setStep, prevStep, resetWizard } = useBookingStore();
+  const { selectedItems, schedule, customer, weightRange, setStep, prevStep, resetWizard } = useBookingStore();
   const createBooking = useCreateBooking();
   const [bookingNumber, setBookingNumber] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(10);
@@ -32,7 +32,7 @@ export function BookingPreview() {
         customer,
         schedule,
         items: selectedItems,
-        priceRange,
+        priceRange: weightRange,
       });
 
       setBookingNumber(result.booking_number);
@@ -155,14 +155,14 @@ export function BookingPreview() {
           </div>
         </SummaryCard>
 
-        {/* Price Range */}
+        {/* Weight Range */}
         <SummaryCard
           icon={IndianRupee}
-          title="Estimated Value"
+          title="Estimated Weight"
           onEdit={() => setStep(1)}
         >
-          {priceRange ? (
-            <p className="text-lg font-bold text-primary">{priceRange.label}</p>
+          {weightRange ? (
+            <p className="text-lg font-bold text-primary">{weightRange.label}</p>
           ) : (
             <p className="text-sm text-on-surface-variant">Not selected</p>
           )}
