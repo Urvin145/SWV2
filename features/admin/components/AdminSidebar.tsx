@@ -16,9 +16,11 @@ import {
   Recycle,
   Menu,
   X,
+  LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const ADMIN_NAV = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -28,11 +30,18 @@ const ADMIN_NAV = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const isActive = (href: string) => {
     if (href === '/admin') return pathname === '/admin';
     return pathname.startsWith(href);
+  };
+
+  const handleLogout = async () => {
+    await fetch('/api/admin/session', { method: 'DELETE' });
+    router.push('/admin/login');
+    router.refresh();
   };
 
   const navContent = (
@@ -79,8 +88,8 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      {/* Back to Site */}
-      <div className="border-t border-outline-variant/15 px-3 py-4">
+      {/* Back to Site + Logout */}
+      <div className="border-t border-outline-variant/15 px-3 py-4 space-y-1">
         <Link
           href="/"
           className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-on-surface-variant transition-all hover:bg-surface-container hover:text-on-surface"
@@ -88,6 +97,13 @@ export function AdminSidebar() {
           <ArrowLeft className="h-4.5 w-4.5" />
           Back to Site
         </Link>
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-red-600 transition-all hover:bg-red-50"
+        >
+          <LogOut className="h-4.5 w-4.5" />
+          Logout
+        </button>
       </div>
     </>
   );
