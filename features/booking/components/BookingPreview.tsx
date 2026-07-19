@@ -1,25 +1,28 @@
 /**
  * Step 4: BookingPreview
  * Full summary of the booking with edit buttons and confirm action.
- * Shows items, schedule, customer details, and estimated value.
+ * Shows items, price range, schedule, customer details.
+ * After confirmation, stays 10 seconds showing the pickup ID.
  */
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Edit2, ShoppingBag, CalendarDays, User, MapPin, Loader2, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Edit2, ShoppingBag, CalendarDays, User, MapPin, Loader2, CheckCircle, IndianRupee, Copy, CheckCheck } from 'lucide-react';
 import { useBookingStore } from '@/features/booking/store/bookingStore';
 import { useCreateBooking } from '@/features/booking/hooks/useCreateBooking';
-import { formatCurrency, formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 import { ROUTES } from '@/constants/routes';
 
 export function BookingPreview() {
   const router = useRouter();
-  const { selectedItems, schedule, customer, estimatedValue, setStep, prevStep, resetWizard } = useBookingStore();
+  const { selectedItems, schedule, customer, priceRange, setStep, prevStep, resetWizard } = useBookingStore();
   const createBooking = useCreateBooking();
   const [bookingNumber, setBookingNumber] = useState<string | null>(null);
+  const [countdown, setCountdown] = useState(10);
+  const [copied, setCopied] = useState(false);
 
   const handleConfirm = async () => {
     if (!schedule) return;
@@ -29,20 +32,44 @@ export function BookingPreview() {
         customer,
         schedule,
         items: selectedItems,
+        priceRange,
       });
 
       setBookingNumber(result.booking_number);
-      // Wait a moment to show success, then redirect
-      setTimeout(() => {
-        resetWizard();
-        router.push(ROUTES.BOOK_COMPLETED);
-      }, 2000);
     } catch (err) {
       console.error('Booking failed:', err);
     }
   };
 
-  // Success state
+  // Countdown timer after booking is confirmed — stays for 10 seconds
+  useEffect(() => {
+    if (!bookingNumber) return;
+
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          resetWizard();
+          router.push(ROUTES.BOOK_COMPLETED);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [bookingNumber, resetWizard, router]);
+
+  const handleCopy = async () => {
+    if (!bookingNumber) return;
+    try {
+      await navigator.clipboard.writeText(bookingNumber);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  };
+
+  // Success state — stays for 10 seconds
   if (bookingNumber) {
     return (
       <motion.div
@@ -58,12 +85,46 @@ export function BookingPreview() {
         >
           <CheckCircle className="h-10 w-10 text-primary" />
         </motion.div>
-        <h2 className="mb-2 text-2xl font-bold text-on-surface">Booking Confirmed!</h2>
-        <p className="mb-2 text-on-surface-variant">Your booking number is</p>
-        <p className="mb-6 rounded-lg bg-primary/10 px-6 py-2 text-lg font-bold text-primary">
-          {bookingNumber}
+        <h2 className="mb-2 text-2xl font-bold text-on-surface">Booking Confirmed! 🎉</h2>
+        <p className="mb-2 text-on-surface-variant">Your pickup ID is</p>
+        <div className="mb-4 flex items-center gap-2">
+          <p className="rounded-xl bg-primary/10 px-6 py-3 text-xl font-bold text-primary tracking-wider">
+            {bookingNumber}
+          </p>
+          <button
+            onClick={handleCopy}
+            className="rounded-lg border border-outline-variant/30 p-2 text-on-surface-variant hover:bg-surface-container transition"
+            title="Copy to clipboard"
+          >
+            {copied ? <CheckCheck className="h-4 w-4 text-primary" /> : <Copy className="h-4 w-4" />}
+          </button>
+        </div>
+        <p className="mb-1 text-sm text-on-surface-variant">
+          Save this ID to track your pickup status.
         </p>
-        <p className="text-sm text-on-surface-variant">Redirecting to confirmation page...</p>
+        <p className="text-xs text-on-surface-variant/70">
+          Redirecting in <span className="font-bold text-primary">{countdown}s</span>...
+        </p>
+
+        {/* Progress bar */}
+        <div className="mt-6 h-1.5 w-48 overflow-hidden rounded-full bg-surface-container">
+          <motion.div
+            className="h-full rounded-full bg-primary"
+            initial={{ width: '100%' }}
+            animate={{ width: '0%' }}
+            transition={{ duration: 10, ease: 'linear' }}
+          />
+        </div>
+
+        <button
+          onClick={() => {
+            resetWizard();
+            router.push(ROUTES.BOOK_COMPLETED);
+          }}
+          className="mt-6 text-sm font-medium text-primary underline underline-offset-2 hover:text-primary-container transition"
+        >
+          Go now →
+        </button>
       </motion.div>
     );
   }
@@ -83,24 +144,28 @@ export function BookingPreview() {
         >
           <div className="space-y-2">
             {selectedItems.map((item) => (
-              <div key={item.scrap_item_id} className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <span>{item.emoji}</span>
-                  <span className="text-on-surface">{item.name}</span>
-                  <span className="text-on-surface-variant">
-                    × {item.estimated_weight} {item.unit}
-                  </span>
-                </div>
-                <span className="font-medium text-on-surface">
-                  {formatCurrency(item.estimated_weight * item.rate_applied)}
+              <div key={item.scrap_item_id} className="flex items-center gap-2 text-sm">
+                <span>{item.emoji}</span>
+                <span className="text-on-surface">{item.name}</span>
+                <span className="text-[10px] text-on-surface-variant rounded-full bg-surface-container px-2 py-0.5">
+                  {item.categoryName}
                 </span>
               </div>
             ))}
-            <div className="mt-3 flex items-center justify-between border-t border-outline-variant/15 pt-3">
-              <span className="font-semibold text-on-surface">Estimated Total</span>
-              <span className="text-lg font-bold text-primary">{formatCurrency(estimatedValue)}</span>
-            </div>
           </div>
+        </SummaryCard>
+
+        {/* Price Range */}
+        <SummaryCard
+          icon={IndianRupee}
+          title="Estimated Value"
+          onEdit={() => setStep(1)}
+        >
+          {priceRange ? (
+            <p className="text-lg font-bold text-primary">{priceRange.label}</p>
+          ) : (
+            <p className="text-sm text-on-surface-variant">Not selected</p>
+          )}
         </SummaryCard>
 
         {/* Schedule Summary */}
