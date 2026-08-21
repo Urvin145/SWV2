@@ -1,19 +1,19 @@
-/**
+﻿/**
  * Rates API Route Handler
- * GET /api/rates — Fetch all current scrap rates
- * GET /api/rates?category=slug — Filter by category
+ * GET /api/rates â€” Fetch all current scrap rates
+ * GET /api/rates?category=slug â€” Filter by category
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { searchParams } = new URL(request.url);
     const categorySlug = searchParams.get('category');
 
-    // Build query: join items → rates → categories
+    // Build query: join items â†’ rates â†’ categories
     let query = supabase
       .from('scrap_items')
       .select(`
@@ -49,3 +49,4 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+

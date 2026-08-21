@@ -1,14 +1,14 @@
-/**
+﻿/**
  * Blog API Route Handler
- * GET /api/blog — List all published blog posts
+ * GET /api/blog â€” List all published blog posts
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 export async function GET() {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     const { data, error } = await supabase
       .from('blog_posts')
@@ -33,3 +33,4 @@ export async function GET() {
     );
   }
 }
+

@@ -1,6 +1,6 @@
-/**
+﻿/**
  * Admin Stats API Route Handler
- * GET /api/admin/stats — Aggregate KPI data for the admin dashboard
+ * GET /api/admin/stats â€” Aggregate KPI data for the admin dashboard
  *
  * Returns:
  *  - total bookings count (by status)
@@ -11,11 +11,11 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 export async function GET() {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     // Fetch all bookings (non-deleted)
     const { data: bookings, error: bookingsError } = await supabase
@@ -104,3 +104,4 @@ export async function GET() {
     );
   }
 }
+

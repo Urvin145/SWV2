@@ -1,11 +1,11 @@
-/**
+﻿/**
  * Single Booking API Route Handler
- * GET /api/bookings/[id] — Get full booking details with items and status logs
- * PATCH /api/bookings/[id]/cancel — Cancel a booking (handled by separate route)
+ * GET /api/bookings/[id] â€” Get full booking details with items and status logs
+ * PATCH /api/bookings/[id]/cancel â€” Cancel a booking (handled by separate route)
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -14,7 +14,7 @@ interface RouteParams {
 export async function GET(_request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     // Fetch booking with related data
     const { data: booking, error: bookingError } = await supabase

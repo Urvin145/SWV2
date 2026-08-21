@@ -1,15 +1,15 @@
-/**
+﻿/**
  * Slots API Route Handler
- * GET /api/slots?date=YYYY-MM-DD — Fetch available pickup slots for a date
+ * GET /api/slots?date=YYYY-MM-DD â€” Fetch available pickup slots for a date
  * Checks capacity (max_bookings_per_day) against existing bookings.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { searchParams } = new URL(request.url);
     const date = searchParams.get('date');
 
@@ -83,3 +83,4 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+

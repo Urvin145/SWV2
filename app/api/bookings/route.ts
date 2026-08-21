@@ -1,12 +1,12 @@
-/**
+﻿/**
  * Bookings API Route Handler
- * POST /api/bookings — Create a new guest booking
- * GET /api/bookings?phone=XXXXXXXXXX — List bookings by phone
- * GET /api/bookings?number=SW-XXXX-XXX — Get booking by booking number
+ * POST /api/bookings â€” Create a new guest booking
+ * GET /api/bookings?phone=XXXXXXXXXX â€” List bookings by phone
+ * GET /api/bookings?number=SW-XXXX-XXX â€” Get booking by booking number
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 import { z } from 'zod';
 
 /** Validation schema for creating a booking */
@@ -38,7 +38,7 @@ const createBookingSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
 
     // Validate request body
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     const { items, estimated_price_range, estimated_weight_min, estimated_weight_max, ...bookingData } = result.data;
 
-    // Calculate estimated value from weight range midpoint (or fallback to weight×rate)
+    // Calculate estimated value from weight range midpoint (or fallback to weightÃ—rate)
     const estimatedValue = (estimated_weight_min != null && estimated_weight_max != null)
       ? (estimated_weight_min + estimated_weight_max) / 2
       : items.reduce(
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
 
     if (itemsError) {
       console.error('Booking items insert error:', itemsError);
-      // Booking was created but items failed — log but don't fail completely
+      // Booking was created but items failed â€” log but don't fail completely
     }
 
     return NextResponse.json(
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { searchParams } = new URL(request.url);
     const phone = searchParams.get('phone');
     const bookingNumber = searchParams.get('number');
@@ -165,3 +165,4 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+

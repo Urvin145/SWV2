@@ -1,16 +1,16 @@
-/**
+﻿/**
  * Admin Categories API
- * POST /api/admin/categories — Create a new scrap category
+ * POST /api/admin/categories â€” Create a new scrap category
  *
  * Body: { name, description?, icon_url? }
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
     const { name, description, icon_url } = body as {
       name: string;
@@ -87,3 +87,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

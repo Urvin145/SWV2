@@ -1,15 +1,15 @@
-/**
+﻿/**
  * Contact API Route Handler
- * POST /api/contact — Submit a contact form
+ * POST /api/contact â€” Submit a contact form
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 import { contactFormSchema } from '@/lib/validators';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
 
     // Validate request body
@@ -51,3 +51,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

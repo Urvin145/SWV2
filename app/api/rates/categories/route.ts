@@ -1,14 +1,14 @@
-/**
+﻿/**
  * Categories API Route Handler
- * GET /api/rates/categories — Fetch all active scrap categories
+ * GET /api/rates/categories â€” Fetch all active scrap categories
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 export async function GET() {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     const { data, error } = await supabase
       .from('scrap_categories')
@@ -33,3 +33,4 @@ export async function GET() {
     );
   }
 }
+

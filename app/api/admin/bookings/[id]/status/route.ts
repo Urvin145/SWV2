@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Admin Booking Status Update API
  * PATCH /api/admin/bookings/[id]/status
  *
@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
   pending: ['confirmed', 'cancelled'],
@@ -20,7 +20,7 @@ export async function PATCH(
 ) {
   try {
     const { id: bookingId } = await params;
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
     const { status, notes } = body as { status: string; notes?: string };
 
@@ -82,7 +82,7 @@ export async function PATCH(
       );
     }
 
-    console.log(`[Admin Status] Booking ${bookingId}: ${booking.status} → ${status}`);
+    console.log(`[Admin Status] Booking ${bookingId}: ${booking.status} â†’ ${status}`);
     return NextResponse.json({ data: updated, error: null, success: true });
   } catch (err) {
     console.error('[Admin Status] API error:', err);

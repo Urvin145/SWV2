@@ -1,6 +1,6 @@
-/**
+﻿/**
  * Admin Rates Update API
- * PATCH /api/admin/rates/[id] — Update scrap item pricing
+ * PATCH /api/admin/rates/[id] â€” Update scrap item pricing
  *
  * Body: { price_per_unit: number }
  *
@@ -8,7 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 export async function PATCH(
   request: NextRequest,
@@ -16,7 +16,7 @@ export async function PATCH(
 ) {
   try {
     const { id: rateId } = await params;
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
     const { price_per_unit } = body as { price_per_unit: number };
 
@@ -73,7 +73,7 @@ export async function PATCH(
     }
 
     console.log(
-      `[Admin Rates] Updated item ${existingRate.scrap_item_id}: ₹${existingRate.price_per_unit} → ₹${price_per_unit}`,
+      `[Admin Rates] Updated item ${existingRate.scrap_item_id}: â‚¹${existingRate.price_per_unit} â†’ â‚¹${price_per_unit}`,
     );
     return NextResponse.json({ data: newRate, error: null, success: true });
   } catch (err) {

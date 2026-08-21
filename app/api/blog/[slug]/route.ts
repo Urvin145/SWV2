@@ -1,10 +1,10 @@
-/**
+﻿/**
  * Single Blog Post API Route Handler
- * GET /api/blog/[slug] — Get a single blog post by slug
+ * GET /api/blog/[slug] â€” Get a single blog post by slug
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -13,7 +13,7 @@ interface RouteParams {
 export async function GET(_request: Request, { params }: RouteParams) {
   try {
     const { slug } = await params;
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     const { data, error } = await supabase
       .from('blog_posts')

@@ -1,6 +1,6 @@
-/**
+﻿/**
  * Admin Bookings List API
- * GET /api/admin/bookings — List bookings with filtering
+ * GET /api/admin/bookings â€” List bookings with filtering
  *
  * Query params:
  *   ?status=pending,confirmed  (comma-separated)
@@ -10,11 +10,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { searchParams } = new URL(request.url);
 
     const status = searchParams.get('status');
@@ -81,3 +81,4 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+

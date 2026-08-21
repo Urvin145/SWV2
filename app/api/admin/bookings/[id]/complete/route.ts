@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Admin Complete Pickup API
  * POST /api/admin/bookings/[id]/complete
  *
@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 export async function POST(
   request: NextRequest,
@@ -17,7 +17,7 @@ export async function POST(
 ) {
   try {
     const { id: bookingId } = await params;
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
     const { items } = body as { items: { booking_item_id: string; actual_weight: number }[] };
 
@@ -108,7 +108,7 @@ export async function POST(
       );
     }
 
-    console.log(`[Admin Complete] Booking ${bookingId} completed. Value: ₹${totalActualValue}`);
+    console.log(`[Admin Complete] Booking ${bookingId} completed. Value: â‚¹${totalActualValue}`);
     return NextResponse.json({ data: updated, error: null, success: true });
   } catch (err) {
     console.error('[Admin Complete] API error:', err);

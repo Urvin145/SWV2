@@ -1,10 +1,10 @@
-/**
+﻿/**
  * Cancel Booking API Route Handler
- * PATCH /api/bookings/[id]/cancel — Cancel a pending or confirmed booking
+ * PATCH /api/bookings/[id]/cancel â€” Cancel a pending or confirmed booking
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -13,7 +13,7 @@ interface RouteParams {
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json().catch(() => ({}));
     const reason = body?.reason || 'Cancelled by customer';
 
