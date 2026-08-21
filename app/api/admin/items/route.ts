@@ -6,11 +6,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/services/supabase/admin';
+import { createClient } from '@/services/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const body = await request.json();
     const { category_id, name, description, unit, price_per_unit } = body as {
       category_id: string;

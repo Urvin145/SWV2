@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/services/supabase/admin';
+import { createClient } from '@/services/supabase/server';
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
   pending: ['confirmed', 'cancelled'],
@@ -20,7 +20,7 @@ export async function PATCH(
 ) {
   try {
     const { id: bookingId } = await params;
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const body = await request.json();
     const { status, notes } = body as { status: string; notes?: string };
 

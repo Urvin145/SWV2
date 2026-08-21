@@ -10,11 +10,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/services/supabase/admin';
+import { createClient } from '@/services/supabase/server';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
 
     const status = searchParams.get('status');

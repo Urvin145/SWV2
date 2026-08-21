@@ -4,11 +4,11 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createAdminClient } from '@/services/supabase/admin';
+import { createClient } from '@/services/supabase/server';
 
 export async function GET() {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
 
     const { data, error } = await supabase
       .from('scrap_categories')

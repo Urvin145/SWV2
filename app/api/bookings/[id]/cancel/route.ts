@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/services/supabase/admin';
+import { createClient } from '@/services/supabase/server';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -13,7 +13,7 @@ interface RouteParams {
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const body = await request.json().catch(() => ({}));
     const reason = body?.reason || 'Cancelled by customer';
 

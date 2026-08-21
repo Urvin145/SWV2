@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/services/supabase/admin';
+import { createClient } from '@/services/supabase/server';
 
 export async function POST(
   request: NextRequest,
@@ -17,7 +17,7 @@ export async function POST(
 ) {
   try {
     const { id: bookingId } = await params;
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const body = await request.json();
     const { items } = body as { items: { booking_item_id: string; actual_weight: number }[] };
 

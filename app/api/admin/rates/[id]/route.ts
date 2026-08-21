@@ -8,7 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/services/supabase/admin';
+import { createClient } from '@/services/supabase/server';
 
 export async function PATCH(
   request: NextRequest,
@@ -16,7 +16,7 @@ export async function PATCH(
 ) {
   try {
     const { id: rateId } = await params;
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const body = await request.json();
     const { price_per_unit } = body as { price_per_unit: number };
 

@@ -4,12 +4,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/services/supabase/admin';
+import { createClient } from '@/services/supabase/server';
 import { contactFormSchema } from '@/lib/validators';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const body = await request.json();
 
     // Validate request body

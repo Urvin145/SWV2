@@ -4,7 +4,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createAdminClient } from '@/services/supabase/admin';
+import { createClient } from '@/services/supabase/server';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -13,7 +13,7 @@ interface RouteParams {
 export async function GET(_request: Request, { params }: RouteParams) {
   try {
     const { slug } = await params;
-    const supabase = createAdminClient();
+    const supabase = await createClient();
 
     const { data, error } = await supabase
       .from('blog_posts')

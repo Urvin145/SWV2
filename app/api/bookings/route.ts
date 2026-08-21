@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/services/supabase/admin';
+import { createClient } from '@/services/supabase/server';
 import { z } from 'zod';
 
 /** Validation schema for creating a booking */
@@ -38,7 +38,7 @@ const createBookingSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const body = await request.json();
 
     // Validate request body
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     const phone = searchParams.get('phone');
     const bookingNumber = searchParams.get('number');
