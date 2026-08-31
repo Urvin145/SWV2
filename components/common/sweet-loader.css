@@ -12,7 +12,7 @@
   background: radial-gradient(circle at 50% 40%, rgba(240, 253, 248, 0.98) 0%, rgba(226, 248, 239, 0.98) 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
   opacity: 1;
   transform: scale(1);
 }
@@ -25,7 +25,7 @@
 }
 
 .site-content-transition {
-  transition: opacity 0.4s ease-out;
+  transition: opacity 0.35s ease-out;
 }
 
 .site-content-hidden {
@@ -164,7 +164,7 @@
   left: 54%;
   z-index: 10;
   transform-origin: center bottom;
-  animation: scrapBoxCycle 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: scrapBoxCycle 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .box-inner {
@@ -197,7 +197,7 @@
   background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   filter: blur(1.5px);
-  animation: boxShadowScale 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: boxShadowScale 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 /* ================================================================
@@ -210,7 +210,7 @@
   width: 100px;
   height: 52px;
   z-index: 15;
-  animation: truckDriveCycle 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: truckDriveCycle 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .chassis {
@@ -242,7 +242,7 @@
   justify-content: center;
   opacity: 0;
   transform: scale(0.5);
-  animation: bedFillPop 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: bedFillPop 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .bed-cargo {
@@ -414,12 +414,12 @@
 
 .rear-tyre {
   left: 12px;
-  animation: wheelSpin 5s linear infinite;
+  animation: wheelSpin 3s linear infinite;
 }
 
 .front-tyre {
   right: 8px;
-  animation: wheelSpin 5s linear infinite;
+  animation: wheelSpin 3s linear infinite;
 }
 
 /* ================================================================
@@ -444,19 +444,19 @@
 .sparkle-star.s1 {
   top: 0;
   left: 10px;
-  animation: sparkleBurst1 5s ease-out infinite;
+  animation: sparkleBurst1 3s ease-out infinite;
 }
 
 .sparkle-star.s2 {
   top: 12px;
   left: -4px;
-  animation: sparkleBurst2 5s ease-out infinite;
+  animation: sparkleBurst2 3s ease-out infinite;
 }
 
 .sparkle-star.s3 {
   top: -4px;
   left: 26px;
-  animation: sparkleBurst3 5s ease-out infinite;
+  animation: sparkleBurst3 3s ease-out infinite;
 }
 
 /* ================================================================
@@ -511,7 +511,7 @@
   height: 100%;
   background: linear-gradient(90deg, #0F8A5F 0%, #72DAA9 50%, #0F8A5F 100%);
   border-radius: 9999px;
-  transition: width 0.08s linear;
+  transition: width 0.06s linear;
 }
 
 .loader-progress-bar.animated-pulse {
@@ -531,7 +531,7 @@
 }
 
 /* ================================================================
-   5-SECOND PRECISE STORYBOARD TIMING
+   3-SECOND PRECISE STORYBOARD TIMING (Full cycle per 3s gap)
    - Frame 1 (0% - 25%): Drive in from left
    - Frame 2 (25% - 45%): Park at curbside & idle
    - Frame 3 (45% - 65%): Scrap jumps in arc over truck bed
