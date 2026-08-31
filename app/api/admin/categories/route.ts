@@ -1,16 +1,19 @@
-﻿/**
+/**
  * Admin Categories API
- * POST /api/admin/categories â€” Create a new scrap category
+ * POST /api/admin/categories — Create a new scrap category
  *
  * Body: { name, description?, icon_url? }
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Admin Categories');
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
     const { name, description, icon_url } = body as {
       name: string;
@@ -70,21 +73,20 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (insertErr) {
-      console.error('[Admin Categories] Insert error:', insertErr);
+      logger.error('Insert error', insertErr);
       return NextResponse.json(
         { data: null, error: 'Failed to create category', success: false },
         { status: 500 },
       );
     }
 
-    console.log(`[Admin Categories] Created: ${name} (${slug})`);
+    logger.info(`Created: ${name} (${slug})`);
     return NextResponse.json({ data: category, error: null, success: true });
   } catch (err) {
-    console.error('[Admin Categories] API error:', err);
+    logger.error('API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },
     );
   }
 }
-

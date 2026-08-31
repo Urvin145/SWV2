@@ -106,3 +106,19 @@ export function truncate(str: string, maxLength: number): string {
   if (str.length <= maxLength) return str;
   return `${str.slice(0, maxLength)}...`;
 }
+
+/**
+ * Sanitize a value for safe use in Supabase PostgREST filter strings.
+ * Strips characters that could be used for filter injection (commas, dots
+ * used in operator syntax, parentheses, etc.).
+ *
+ * @example
+ * sanitizeFilterValue('hello,world.eq.true') // 'helloworldeqtrue'
+ * sanitizeFilterValue('normal search')        // 'normal search'
+ */
+export function sanitizeFilterValue(value: string): string {
+  // Remove PostgREST filter metacharacters: commas, dots, parentheses, brackets
+  // Allow alphanumeric, spaces, hyphens, underscores, plus, at-sign
+  return value.replace(/[,.()\[\]{}\\\/;:!<>=*&|^~`"'%#$?]/g, '').trim();
+}
+

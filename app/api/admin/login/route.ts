@@ -6,12 +6,24 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { createLogger } from '@/lib/logger';
 
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'scrapwala';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'scrapwala@123';
+const logger = createLogger('Admin Login');
+
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 export async function POST(request: NextRequest) {
   try {
+    // Fail closed: if credentials aren't configured, deny all logins
+    if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
+      logger.error('Admin credentials not configured in environment variables');
+      return NextResponse.json(
+        { error: 'Admin login is not configured', success: false },
+        { status: 503 },
+      );
+    }
+
     const body = await request.json();
     const { username, password } = body as { username: string; password: string };
 
@@ -23,14 +35,15 @@ export async function POST(request: NextRequest) {
     }
 
     if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
+      logger.warn('Failed login attempt');
       return NextResponse.json(
         { error: 'Invalid credentials', success: false },
         { status: 401 },
       );
     }
 
-    // Create a simple session token (hash of credentials + timestamp)
-    const token = Buffer.from(`${ADMIN_USERNAME}:${Date.now()}`).toString('base64');
+    // Create a session token using crypto-random UUID (not forgeable)
+    const token = crypto.randomUUID();
 
     const response = NextResponse.json({ success: true });
 
@@ -43,10 +56,10 @@ export async function POST(request: NextRequest) {
       maxAge: 60 * 60 * 24, // 24 hours
     });
 
-    console.log('[Admin Login] Successful login');
+    logger.info('Successful login');
     return response;
   } catch (err) {
-    console.error('[Admin Login] API error:', err);
+    logger.error('API error', err);
     return NextResponse.json(
       { error: 'Internal server error', success: false },
       { status: 500 },

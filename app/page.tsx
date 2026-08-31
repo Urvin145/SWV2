@@ -52,6 +52,9 @@ const jsonLd = {
 export default function HomePage() {
   return (
     <>
+      {/* SECURITY: Safe usage — jsonLd is a static, developer-controlled object.
+          No user input flows into this data. If user data is ever added,
+          sanitize it before including in the JSON-LD object. */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

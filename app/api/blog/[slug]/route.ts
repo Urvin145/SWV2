@@ -1,10 +1,13 @@
-﻿/**
+/**
  * Single Blog Post API Route Handler
  * GET /api/blog/[slug] â€” Get a single blog post by slug
  */
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@/services/supabase/server';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Blog Post');
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -31,7 +34,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ data, error: null, success: true });
   } catch (err) {
-    console.error('Blog post error:', err);
+    logger.error('Blog post error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },

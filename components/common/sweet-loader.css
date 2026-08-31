@@ -1,0 +1,710 @@
+/* ================================================================
+   SweetLoader — 3D Mini-Tempo Scrap Pickup Animation Styles
+   ================================================================ */
+
+.sweet-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 40%, rgba(240, 253, 248, 0.98) 0%, rgba(226, 248, 239, 0.98) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.sweet-loader-overlay.fade-out {
+  opacity: 0;
+  transform: scale(1.03);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.site-content-transition {
+  transition: opacity 0.4s ease-out;
+}
+
+.site-content-hidden {
+  opacity: 0;
+}
+
+.sweet-loader-card {
+  position: relative;
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 28px 24px 22px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(240, 253, 248, 0.92));
+  border: 1.5px solid rgba(15, 138, 95, 0.2);
+  border-radius: 24px;
+  box-shadow: 
+    0 24px 48px -12px rgba(15, 138, 95, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.9) inset,
+    0 10px 20px -4px rgba(17, 32, 28, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  animation: cardFloat 3s ease-in-out infinite;
+}
+
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Background Ambient Glow */
+.sweet-loader-card::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 130px;
+  background: radial-gradient(circle, rgba(142, 247, 196, 0.55) 0%, rgba(15, 138, 95, 0) 70%);
+  filter: blur(28px);
+  pointer-events: none;
+}
+
+/* ================================================================
+   Mini Stage (Animation Viewport)
+   ================================================================ */
+.mini-stage {
+  position: relative;
+  width: 100%;
+  height: 132px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #F0FDF8 0%, #E2F8EF 65%, #CEEDE0 100%);
+  border: 1px solid rgba(15, 138, 95, 0.15);
+  box-shadow: inset 0 2px 8px rgba(15, 138, 95, 0.08);
+}
+
+/* Clouds floating in sky */
+.eco-cloud {
+  position: absolute;
+  top: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  filter: blur(0.5px);
+  animation: floatClouds 6s linear infinite;
+}
+
+.cloud-1 {
+  left: 15%;
+  width: 46px;
+  height: 13px;
+}
+
+.cloud-2 {
+  left: 70%;
+  top: 26px;
+  width: 34px;
+  height: 10px;
+  animation-delay: -3s;
+}
+
+@keyframes floatClouds {
+  0% { transform: translateX(220px); opacity: 0; }
+  15% { opacity: 0.9; }
+  85% { opacity: 0.9; }
+  100% { transform: translateX(-160px); opacity: 0; }
+}
+
+/* ================================================================
+   Road & Ground Line
+   ================================================================ */
+.ground-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background: linear-gradient(180deg, #2D3A36 0%, #1A2421 100%);
+  border-top: 3px solid #0F8A5F;
+  box-shadow: 0 -2px 10px rgba(15, 138, 95, 0.25);
+  overflow: hidden;
+}
+
+.road-stripes {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  transform: translateY(-50%);
+  background-image: repeating-linear-gradient(
+    90deg,
+    #F4B740 0,
+    #F4B740 16px,
+    transparent 16px,
+    transparent 32px
+  );
+  background-size: 64px 3px;
+  animation: roadScroll 0.75s linear infinite;
+}
+
+@keyframes roadScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: -64px 0; }
+}
+
+/* ================================================================
+   Curbside Scrap Box (parabolic arc jump physics)
+   ================================================================ */
+.sweet-box {
+  position: absolute;
+  bottom: 30px;
+  left: 54%;
+  z-index: 10;
+  transform-origin: center bottom;
+  animation: scrapBoxCycle 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.box-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #DEB887 0%, #CD853F 100%);
+  border: 1.5px solid #8B5A2B;
+  border-radius: 6px;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.box-emoji {
+  font-size: 16px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+}
+
+.box-shadow {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  filter: blur(1.5px);
+  animation: boxShadowScale 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* ================================================================
+   Truck Assembly (Chassis, Cab, Bed, Tires)
+   ================================================================ */
+.truck-assembly {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  width: 100px;
+  height: 52px;
+  z-index: 15;
+  animation: truckDriveCycle 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.chassis {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 42px;
+  display: flex;
+}
+
+/* Open Bed with Rails */
+.truck-bed {
+  position: relative;
+  width: 54px;
+  height: 38px;
+  background: linear-gradient(180deg, #00855B 0%, #0F8A5F 100%);
+  border: 2px solid #096846;
+  border-radius: 6px 2px 2px 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18), inset 0 2px 4px rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.bed-fill {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.5);
+  animation: bedFillPop 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.bed-cargo {
+  font-size: 20px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.bed-rails {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 1px;
+}
+
+.brand-badge {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #FFFFFF;
+  background: rgba(17, 32, 28, 0.6);
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 0.5px solid rgba(142, 247, 196, 0.5);
+}
+
+/* Aerodynamic Modern Electric Cab */
+.cab {
+  position: relative;
+  width: 44px;
+  height: 40px;
+  background: linear-gradient(145deg, #12AA75 0%, #0F8A5F 50%, #096846 100%);
+  border: 2px solid #096846;
+  border-radius: 4px 16px 4px 4px;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 3px rgba(255, 255, 255, 0.4);
+}
+
+.tinted-window {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  width: 26px;
+  height: 18px;
+  background: linear-gradient(135deg, #1C332D 0%, #0B1613 100%);
+  border: 1.5px solid #2F4D44;
+  border-radius: 3px 10px 2px 2px;
+  overflow: hidden;
+}
+
+.tinted-window::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
+}
+
+.driver-silhouette {
+  position: absolute;
+  bottom: 2px;
+  left: 6px;
+  width: 10px;
+  height: 10px;
+  background: #11201C;
+  border-radius: 50% 50% 0 0;
+  opacity: 0.8;
+}
+
+/* LED Headlight with projected beam */
+.led-headlight {
+  position: absolute;
+  bottom: 8px;
+  right: -2px;
+  width: 6px;
+  height: 8px;
+  background: #72DAA9;
+  border-radius: 2px 4px 4px 2px;
+  box-shadow: 0 0 10px #72DAA9, 0 0 20px #8EF7C4;
+}
+
+.light-beam {
+  position: absolute;
+  top: -8px;
+  left: 6px;
+  width: 70px;
+  height: 24px;
+  background: linear-gradient(90deg, rgba(142, 247, 196, 0.45) 0%, rgba(142, 247, 196, 0) 100%);
+  clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 70%);
+  pointer-events: none;
+}
+
+.grille-accent {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  width: 22px;
+  height: 2px;
+  background: #72DAA9;
+  border-radius: 1px;
+  opacity: 0.8;
+}
+
+/* Underglow Neon */
+.truck-underglow {
+  position: absolute;
+  bottom: 6px;
+  left: 10px;
+  width: 80px;
+  height: 8px;
+  background: radial-gradient(ellipse at center, rgba(114, 218, 169, 0.7) 0%, rgba(15, 138, 95, 0) 70%);
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+/* ================================================================
+   Tyres / Wheels (Rotates during drive phases)
+   ================================================================ */
+.tyre {
+  position: absolute;
+  bottom: -4px;
+  width: 20px;
+  height: 20px;
+  background: #11201C;
+  border: 3px solid #33443F;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.wheel-rim {
+  width: 8px;
+  height: 8px;
+  background: #BDCAC0;
+  border-radius: 50%;
+  position: relative;
+}
+
+.wheel-rim::before,
+.wheel-rim::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #11201C;
+}
+
+.wheel-rim::before {
+  width: 8px;
+  height: 2px;
+}
+
+.wheel-rim::after {
+  width: 2px;
+  height: 8px;
+}
+
+.rear-tyre {
+  left: 12px;
+  animation: wheelSpin 5s linear infinite;
+}
+
+.front-tyre {
+  right: 8px;
+  animation: wheelSpin 5s linear infinite;
+}
+
+/* ================================================================
+   Eco Sparkles (Burst when scrap lands in truck)
+   ================================================================ */
+.eco-sparkle {
+  position: absolute;
+  top: -16px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.sparkle-star {
+  position: absolute;
+  font-size: 16px;
+  opacity: 0;
+}
+
+.sparkle-star.s1 {
+  top: 0;
+  left: 10px;
+  animation: sparkleBurst1 5s ease-out infinite;
+}
+
+.sparkle-star.s2 {
+  top: 12px;
+  left: -4px;
+  animation: sparkleBurst2 5s ease-out infinite;
+}
+
+.sparkle-star.s3 {
+  top: -4px;
+  left: 26px;
+  animation: sparkleBurst3 5s ease-out infinite;
+}
+
+/* ================================================================
+   Typography & Progress Bar
+   ================================================================ */
+.sweet-label-wrapper {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sweet-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #11201C;
+  letter-spacing: -0.2px;
+  position: relative;
+  display: inline-block;
+  animation: labelPulse 1.5s ease-in-out infinite;
+}
+
+.sweet-sublabel {
+  font-size: 12px;
+  color: #52625D;
+  font-weight: 500;
+  margin: 0;
+}
+
+.sweet-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0F8A5F;
+}
+
+.loader-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(15, 138, 95, 0.12);
+  border-radius: 9999px;
+  margin-top: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loader-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #0F8A5F 0%, #72DAA9 50%, #0F8A5F 100%);
+  border-radius: 9999px;
+  transition: width 0.08s linear;
+}
+
+.loader-progress-bar.animated-pulse {
+  width: 45%;
+  animation: progressPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes progressPulse {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(120%); }
+  100% { transform: translateX(300%); }
+}
+
+@keyframes labelPulse {
+  0%, 100% { opacity: 0.92; }
+  50% { opacity: 1; transform: scale(1.01); }
+}
+
+/* ================================================================
+   5-SECOND PRECISE STORYBOARD TIMING
+   - Frame 1 (0% - 25%): Drive in from left
+   - Frame 2 (25% - 45%): Park at curbside & idle
+   - Frame 3 (45% - 65%): Scrap jumps in arc over truck bed
+   - Frame 4 (65% - 78%): Scrap lands in truck bed, sparkle bursts
+   - Frame 5 (78% - 100%): Speed away to the right, reset
+   ================================================================ */
+
+/* Truck Movement */
+@keyframes truckDriveCycle {
+  0% {
+    transform: translateX(-130px);
+  }
+  24% {
+    transform: translateX(18px); /* Parking spot */
+  }
+  27% {
+    transform: translateX(16px) rotate(-1deg); /* Soft stop bounce */
+  }
+  30%, 72% {
+    transform: translateX(16px) rotate(0deg); /* Idle during loading */
+  }
+  75% {
+    transform: translateX(12px) scale(0.98, 1.02); /* Anticipation before sprint */
+  }
+  86% {
+    transform: translateX(110px) rotate(1deg); /* Accelerating right */
+  }
+  100% {
+    transform: translateX(290px) rotate(1deg); /* Speeds away off-screen */
+  }
+}
+
+/* Wheel Rotation */
+@keyframes wheelSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  24% {
+    transform: rotate(480deg);
+  }
+  25%, 72% {
+    transform: rotate(480deg); /* Stationary when parked */
+  }
+  100% {
+    transform: rotate(1400deg); /* High-speed exit */
+  }
+}
+
+/* Curbside Scrap Box Physics: Jump arc from curb into truck */
+@keyframes scrapBoxCycle {
+  0%, 25% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  38% {
+    /* Anticipation squash before jump */
+    transform: translate(0, 3px) scale(1.15, 0.85);
+    opacity: 1;
+  }
+  46% {
+    /* Launch upward */
+    transform: translate(-18px, -45px) rotate(-18deg) scale(0.95, 1.08);
+    opacity: 1;
+  }
+  58% {
+    /* Apex of arc above truck bed */
+    transform: translate(-38px, -52px) rotate(-28deg) scale(1);
+    opacity: 1;
+  }
+  66% {
+    /* Landing in truck bed */
+    transform: translate(-60px, -6px) rotate(-6deg) scale(1.1, 0.9);
+    opacity: 1;
+  }
+  68%, 76% {
+    /* Settled in truck bed (moving with truck) */
+    transform: translate(-60px, -6px) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  77%, 100% {
+    /* Box gone from curb */
+    transform: translate(0, 0) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Box Ground Shadow */
+@keyframes boxShadowScale {
+  0%, 38% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.4;
+  }
+  46%, 58% {
+    transform: translateX(-50%) scale(0.3);
+    opacity: 0.08;
+  }
+  66%, 100% {
+    transform: translateX(-50%) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Bed Fill (cargo visible inside truck after landing) */
+@keyframes bedFillPop {
+  0%, 65% {
+    opacity: 0;
+    transform: scale(0.4) translateY(-10px);
+  }
+  68% {
+    opacity: 1;
+    transform: scale(1.15) translateY(0);
+  }
+  72%, 76% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  77%, 100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Eco Sparkle Bursts */
+@keyframes sparkleBurst1 {
+  0%, 65% {
+    opacity: 0;
+    transform: scale(0) translate(0, 0);
+  }
+  68% {
+    opacity: 1;
+    transform: scale(1.2) translate(4px, -18px) rotate(20deg);
+  }
+  76% {
+    opacity: 0;
+    transform: scale(0.6) translate(8px, -28px) rotate(40deg);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sparkleBurst2 {
+  0%, 66% {
+    opacity: 0;
+    transform: scale(0) translate(0, 0);
+  }
+  69% {
+    opacity: 1;
+    transform: scale(1) translate(-10px, -14px) rotate(-15deg);
+  }
+  78% {
+    opacity: 0;
+    transform: scale(0.4) translate(-16px, -24px) rotate(-30deg);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sparkleBurst3 {
+  0%, 67% {
+    opacity: 0;
+    transform: scale(0) translate(0, 0);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.1) translate(16px, -12px) rotate(15deg);
+  }
+  79% {
+    opacity: 0;
+    transform: scale(0.5) translate(22px, -22px) rotate(30deg);
+  }
+  100% {
+    opacity: 0;
+  }
+}

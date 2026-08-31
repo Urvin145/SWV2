@@ -12,6 +12,21 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ authenticated: false });
   }
 
+  // Validate the token is a valid UUID format (from crypto.randomUUID)
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(session.value)) {
+    // Invalid / forged token — clear the cookie
+    const response = NextResponse.json({ authenticated: false });
+    response.cookies.set('admin_session', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 0,
+    });
+    return response;
+  }
+
   return NextResponse.json({ authenticated: true });
 }
 

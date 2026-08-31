@@ -1,13 +1,17 @@
-﻿/**
+/**
  * Bookings API Route Handler
- * POST /api/bookings â€” Create a new guest booking
- * GET /api/bookings?phone=XXXXXXXXXX â€” List bookings by phone
- * GET /api/bookings?number=SW-XXXX-XXX â€” Get booking by booking number
+ * POST /api/bookings — Create a new guest booking
+ * GET /api/bookings?phone=XXXXXXXXXX — List bookings by phone
+ * GET /api/bookings?number=SW-XXXX-XXX — Get booking by booking number
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/services/supabase/server';
 import { z } from 'zod';
+import { createLogger } from '@/lib/logger';
+import { sanitizeFilterValue } from '@/lib/utils';
+
+const logger = createLogger('Bookings');
 
 /** Validation schema for creating a booking */
 const createBookingSchema = z.object({
@@ -56,7 +60,7 @@ export async function POST(request: NextRequest) {
 
     const { items, estimated_price_range, estimated_weight_min, estimated_weight_max, ...bookingData } = result.data;
 
-    // Calculate estimated value from weight range midpoint (or fallback to weightÃ—rate)
+    // Calculate estimated value from weight range midpoint (or fallback to weight×rate)
     const estimatedValue = (estimated_weight_min != null && estimated_weight_max != null)
       ? (estimated_weight_min + estimated_weight_max) / 2
       : items.reduce(
@@ -79,7 +83,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (bookingError) {
-      console.error('Booking insert error:', bookingError);
+      logger.error('Booking insert error', bookingError);
       return NextResponse.json(
         { data: null, error: 'Failed to create booking', success: false },
         { status: 500 },
@@ -98,8 +102,15 @@ export async function POST(request: NextRequest) {
     const { error: itemsError } = await supabase.from('booking_items').insert(bookingItems);
 
     if (itemsError) {
-      console.error('Booking items insert error:', itemsError);
-      // Booking was created but items failed â€” log but don't fail completely
+      logger.error('Booking items insert error — rolling back booking', itemsError);
+
+      // L3 fix: Roll back the booking if items fail to insert
+      await supabase.from('bookings').delete().eq('id', booking.id);
+
+      return NextResponse.json(
+        { data: null, error: 'Failed to create booking items. Please try again.', success: false },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(
@@ -107,7 +118,7 @@ export async function POST(request: NextRequest) {
       { status: 201 },
     );
   } catch (err) {
-    console.error('Bookings POST error:', err);
+    logger.error('Bookings POST error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },
@@ -139,17 +150,20 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (bookingNumber) {
-      query = query.eq('booking_number', bookingNumber);
+      // Sanitize booking number to prevent filter injection
+      const sanitized = sanitizeFilterValue(bookingNumber);
+      query = query.eq('booking_number', sanitized);
     } else if (phone) {
-      // Normalize phone (remove +91 prefix if present)
-      const normalizedPhone = phone.replace(/^\+91/, '');
+      // Sanitize phone and normalize (remove +91 prefix if present)
+      const sanitized = sanitizeFilterValue(phone);
+      const normalizedPhone = sanitized.replace(/^\+?91/, '');
       query = query.or(`customer_phone.eq.${normalizedPhone},customer_phone.eq.+91${normalizedPhone}`);
     }
 
     const { data, error } = await query;
 
     if (error) {
-      console.error('Bookings fetch error:', error);
+      logger.error('Bookings fetch error', error);
       return NextResponse.json(
         { data: null, error: 'Failed to fetch bookings', success: false },
         { status: 500 },
@@ -158,11 +172,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data, error: null, success: true });
   } catch (err) {
-    console.error('Bookings GET error:', err);
+    logger.error('Bookings GET error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },
     );
   }
 }
-

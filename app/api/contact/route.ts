@@ -1,11 +1,14 @@
-﻿/**
+/**
  * Contact API Route Handler
- * POST /api/contact â€” Submit a contact form
+ * POST /api/contact — Submit a contact form
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/services/supabase/server';
 import { contactFormSchema } from '@/lib/validators';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Contact');
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,7 +35,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Contact submission error:', error);
+      logger.error('Contact submission error', error);
       return NextResponse.json(
         { data: null, error: 'Failed to submit contact form', success: false },
         { status: 500 },
@@ -44,11 +47,10 @@ export async function POST(request: NextRequest) {
       { status: 201 },
     );
   } catch (err) {
-    console.error('Contact API error:', err);
+    logger.error('Contact API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },
     );
   }
 }
-

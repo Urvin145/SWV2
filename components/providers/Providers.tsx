@@ -1,13 +1,15 @@
 /**
- * TanStack Query Provider
- * Wraps the application with React Query's QueryClientProvider.
- * This is a Client Component because React Query requires browser-side state.
+ * Providers
+ * Wraps the application with:
+ * 1. TanStack React Query Provider
+ * 2. Mandatory 3-second Eco-Tempo SiteLoaderProvider
  */
 
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
+import { SiteLoaderProvider } from './SiteLoaderProvider';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -39,5 +41,11 @@ export function Providers({ children }: ProvidersProps) {
       }),
   );
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SiteLoaderProvider>
+        {children}
+      </SiteLoaderProvider>
+    </QueryClientProvider>
+  );
 }

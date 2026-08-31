@@ -1,11 +1,14 @@
-﻿/**
+/**
  * Single Booking API Route Handler
- * GET /api/bookings/[id] â€” Get full booking details with items and status logs
- * PATCH /api/bookings/[id]/cancel â€” Cancel a booking (handled by separate route)
+ * GET /api/bookings/[id] — Get full booking details with items and status logs
+ * PATCH /api/bookings/[id]/cancel — Cancel a booking (handled by separate route)
  */
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@/services/supabase/server';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Booking Detail');
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -60,7 +63,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
       success: true,
     });
   } catch (err) {
-    console.error('Booking detail error:', err);
+    logger.error('Booking detail error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },

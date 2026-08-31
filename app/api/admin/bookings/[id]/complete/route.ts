@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Admin Complete Pickup API
  * POST /api/admin/bookings/[id]/complete
  *
@@ -9,7 +9,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Admin Complete');
 
 export async function POST(
   request: NextRequest,
@@ -17,7 +20,7 @@ export async function POST(
 ) {
   try {
     const { id: bookingId } = await params;
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
     const { items } = body as { items: { booking_item_id: string; actual_weight: number }[] };
 
@@ -37,7 +40,7 @@ export async function POST(
       .single();
 
     if (bErr || !booking) {
-      console.error('[Admin Complete] Booking not found:', bErr);
+      logger.error('Booking not found', bErr);
       return NextResponse.json(
         { data: null, error: 'Booking not found', success: false },
         { status: 404 },
@@ -101,17 +104,17 @@ export async function POST(
       .single();
 
     if (updateErr) {
-      console.error('[Admin Complete] Update error:', updateErr);
+      logger.error('Update error', updateErr);
       return NextResponse.json(
         { data: null, error: 'Failed to complete booking', success: false },
         { status: 500 },
       );
     }
 
-    console.log(`[Admin Complete] Booking ${bookingId} completed. Value: â‚¹${totalActualValue}`);
+    logger.info(`Booking ${bookingId} completed. Value: ₹${totalActualValue}`);
     return NextResponse.json({ data: updated, error: null, success: true });
   } catch (err) {
-    console.error('[Admin Complete] API error:', err);
+    logger.error('API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },

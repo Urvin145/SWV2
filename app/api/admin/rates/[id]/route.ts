@@ -1,6 +1,6 @@
-﻿/**
+/**
  * Admin Rates Update API
- * PATCH /api/admin/rates/[id] â€” Update scrap item pricing
+ * PATCH /api/admin/rates/[id] — Update scrap item pricing
  *
  * Body: { price_per_unit: number }
  *
@@ -8,7 +8,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Admin Rates');
 
 export async function PATCH(
   request: NextRequest,
@@ -16,7 +19,7 @@ export async function PATCH(
 ) {
   try {
     const { id: rateId } = await params;
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
     const { price_per_unit } = body as { price_per_unit: number };
 
@@ -35,7 +38,7 @@ export async function PATCH(
       .single();
 
     if (fetchErr || !existingRate) {
-      console.error('[Admin Rates] Rate not found:', fetchErr);
+      logger.error('Rate not found', fetchErr);
       return NextResponse.json(
         { data: null, error: 'Rate not found', success: false },
         { status: 404 },
@@ -65,19 +68,19 @@ export async function PATCH(
       .single();
 
     if (insertErr) {
-      console.error('[Admin Rates] Insert error:', insertErr);
+      logger.error('Insert error', insertErr);
       return NextResponse.json(
         { data: null, error: 'Failed to update rate', success: false },
         { status: 500 },
       );
     }
 
-    console.log(
-      `[Admin Rates] Updated item ${existingRate.scrap_item_id}: â‚¹${existingRate.price_per_unit} â†’ â‚¹${price_per_unit}`,
+    logger.info(
+      `Updated item ${existingRate.scrap_item_id}: ₹${existingRate.price_per_unit} → ₹${price_per_unit}`,
     );
     return NextResponse.json({ data: newRate, error: null, success: true });
   } catch (err) {
-    console.error('[Admin Rates] API error:', err);
+    logger.error('API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },

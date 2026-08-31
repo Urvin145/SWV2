@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Slots API Route Handler
  * GET /api/slots?date=YYYY-MM-DD â€” Fetch available pickup slots for a date
  * Checks capacity (max_bookings_per_day) against existing bookings.
@@ -6,6 +6,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/services/supabase/server';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Slots');
 
 export async function GET(request: NextRequest) {
   try {
@@ -37,7 +40,7 @@ export async function GET(request: NextRequest) {
       .order('start_time', { ascending: true });
 
     if (slotsError) {
-      console.error('Slots fetch error:', slotsError);
+      logger.error('Slots fetch error', slotsError);
       return NextResponse.json(
         { data: null, error: 'Failed to fetch slots', success: false },
         { status: 500 },
@@ -53,7 +56,7 @@ export async function GET(request: NextRequest) {
       .not('status', 'eq', 'cancelled');
 
     if (countError) {
-      console.error('Booking count error:', countError);
+      logger.error('Booking count error', countError);
       return NextResponse.json(
         { data: null, error: 'Failed to check availability', success: false },
         { status: 500 },
@@ -76,7 +79,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data: slotsWithAvailability, error: null, success: true });
   } catch (err) {
-    console.error('Slots API error:', err);
+    logger.error('Slots API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },

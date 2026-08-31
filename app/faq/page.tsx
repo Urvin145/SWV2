@@ -42,6 +42,8 @@ const jsonLd = {
 export default function FAQPage() {
   return (
     <>
+      {/* SECURITY: Safe usage — jsonLd is built from static, developer-controlled
+          FAQ data. No user input flows into this object. */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

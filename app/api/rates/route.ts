@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Rates API Route Handler
  * GET /api/rates â€” Fetch all current scrap rates
  * GET /api/rates?category=slug â€” Filter by category
@@ -6,6 +6,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/services/supabase/server';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Rates');
 
 export async function GET(request: NextRequest) {
   try {
@@ -33,7 +36,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
 
     if (error) {
-      console.error('Rates fetch error:', error);
+      logger.error('Rates fetch error', error);
       return NextResponse.json(
         { data: null, error: 'Failed to fetch rates', success: false },
         { status: 500 },
@@ -42,7 +45,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data, error: null, success: true });
   } catch (err) {
-    console.error('Rates API error:', err);
+    logger.error('Rates API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },

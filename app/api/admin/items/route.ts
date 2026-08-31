@@ -1,16 +1,19 @@
-﻿/**
+/**
  * Admin Items API
- * POST /api/admin/items â€” Create a new scrap item with an initial rate
+ * POST /api/admin/items — Create a new scrap item with an initial rate
  *
  * Body: { category_id, name, description?, unit?, price_per_unit }
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Admin Items');
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
     const { category_id, name, description, unit, price_per_unit } = body as {
       category_id: string;
@@ -103,7 +106,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (itemErr) {
-      console.error('[Admin Items] Insert error:', itemErr);
+      logger.error('Insert error', itemErr);
       return NextResponse.json(
         { data: null, error: 'Failed to create item', success: false },
         { status: 500 },
@@ -122,18 +125,17 @@ export async function POST(request: NextRequest) {
       });
 
     if (rateErr) {
-      console.error('[Admin Items] Rate insert error:', rateErr);
-      // Item was created but rate failed â€” log but still return success
+      logger.error('Rate insert error', rateErr);
+      // Item was created but rate failed — log but still return success
     }
 
-    console.log(`[Admin Items] Created: ${name} (${slug}) at â‚¹${price_per_unit}`);
+    logger.info(`Created: ${name} (${slug}) at ₹${price_per_unit}`);
     return NextResponse.json({ data: item, error: null, success: true });
   } catch (err) {
-    console.error('[Admin Items] API error:', err);
+    logger.error('API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },
     );
   }
 }
-

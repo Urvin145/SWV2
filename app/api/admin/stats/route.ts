@@ -1,6 +1,6 @@
-﻿/**
+/**
  * Admin Stats API Route Handler
- * GET /api/admin/stats â€” Aggregate KPI data for the admin dashboard
+ * GET /api/admin/stats — Aggregate KPI data for the admin dashboard
  *
  * Returns:
  *  - total bookings count (by status)
@@ -11,11 +11,14 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Admin Stats');
 
 export async function GET() {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     // Fetch all bookings (non-deleted)
     const { data: bookings, error: bookingsError } = await supabase
@@ -25,7 +28,7 @@ export async function GET() {
       .order('created_at', { ascending: false });
 
     if (bookingsError) {
-      console.error('[Admin Stats] Bookings query error:', bookingsError);
+      logger.error('Bookings query error', bookingsError);
       return NextResponse.json(
         { data: null, error: 'Failed to fetch bookings', success: false },
         { status: 500 },
@@ -97,11 +100,10 @@ export async function GET() {
       success: true,
     });
   } catch (err) {
-    console.error('[Admin Stats] API error:', err);
+    logger.error('API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },
     );
   }
 }
-

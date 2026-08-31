@@ -1,6 +1,6 @@
-﻿/**
+/**
  * Admin Bookings List API
- * GET /api/admin/bookings â€” List bookings with filtering
+ * GET /api/admin/bookings — List bookings with filtering
  *
  * Query params:
  *   ?status=pending,confirmed  (comma-separated)
@@ -10,11 +10,15 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
+import { createLogger } from '@/lib/logger';
+import { sanitizeFilterValue } from '@/lib/utils';
+
+const logger = createLogger('Admin Bookings');
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { searchParams } = new URL(request.url);
 
     const status = searchParams.get('status');
@@ -48,9 +52,12 @@ export async function GET(request: NextRequest) {
       query = query.in('status', statuses);
     }
 
-    // Search by booking number or phone
+    // Search by booking number or phone (sanitized to prevent filter injection)
     if (search) {
-      query = query.or(`booking_number.ilike.%${search}%,customer_phone.ilike.%${search}%,customer_name.ilike.%${search}%`);
+      const sanitized = sanitizeFilterValue(search);
+      if (sanitized) {
+        query = query.or(`booking_number.ilike.%${sanitized}%,customer_phone.ilike.%${sanitized}%,customer_name.ilike.%${sanitized}%`);
+      }
     }
 
     // Date range
@@ -60,7 +67,7 @@ export async function GET(request: NextRequest) {
     const { data, error, count } = await query;
 
     if (error) {
-      console.error('[Admin Bookings] Query error:', error);
+      logger.error('Query error', error);
       return NextResponse.json(
         { data: null, error: 'Failed to fetch bookings', success: false },
         { status: 500 },
@@ -74,11 +81,10 @@ export async function GET(request: NextRequest) {
       success: true,
     });
   } catch (err) {
-    console.error('[Admin Bookings] API error:', err);
+    logger.error('API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },
     );
   }
 }
-

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Admin Booking Status Update API
  * PATCH /api/admin/bookings/[id]/status
  *
@@ -6,7 +6,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/services/supabase/server';
+import { createAdminClient } from '@/services/supabase/admin';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Admin Status');
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
   pending: ['confirmed', 'cancelled'],
@@ -20,7 +23,7 @@ export async function PATCH(
 ) {
   try {
     const { id: bookingId } = await params;
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await request.json();
     const { status, notes } = body as { status: string; notes?: string };
 
@@ -75,17 +78,17 @@ export async function PATCH(
       .single();
 
     if (updateErr) {
-      console.error('[Admin Status] Update error:', updateErr);
+      logger.error('Update error', updateErr);
       return NextResponse.json(
         { data: null, error: 'Failed to update status', success: false },
         { status: 500 },
       );
     }
 
-    console.log(`[Admin Status] Booking ${bookingId}: ${booking.status} â†’ ${status}`);
+    logger.info(`Booking ${bookingId}: ${booking.status} → ${status}`);
     return NextResponse.json({ data: updated, error: null, success: true });
   } catch (err) {
-    console.error('[Admin Status] API error:', err);
+    logger.error('API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },

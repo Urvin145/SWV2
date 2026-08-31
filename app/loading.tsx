@@ -1,15 +1,18 @@
 /**
  * Global Loading Page
  * Displayed during page transitions and initial data loading.
- * Uses the Loader component with the Scrapwala brand animation.
+ * Uses the SweetLoader component with the Scrapwala electric mini-tempo animation.
  */
 
-import { Loader } from '@/components/common/Loader';
+import { SweetLoader } from '@/components/common/SweetLoader';
 
 export default function Loading() {
   return (
-    <div className="flex min-h-[60vh] items-center justify-center">
-      <Loader size="lg" message="Loading..." />
+    <div className="flex min-h-[70vh] items-center justify-center p-4">
+      <SweetLoader
+        message="Assigning your pickup buddy..."
+        submessage="Preparing your eco-friendly scrap collection experience"
+      />
     </div>
   );
 }

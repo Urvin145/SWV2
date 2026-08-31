@@ -1,10 +1,13 @@
-﻿/**
+/**
  * Cancel Booking API Route Handler
- * PATCH /api/bookings/[id]/cancel â€” Cancel a pending or confirmed booking
+ * PATCH /api/bookings/[id]/cancel — Cancel a pending or confirmed booking
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/services/supabase/server';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('Cancel Booking');
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -56,7 +59,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       .single();
 
     if (updateError) {
-      console.error('Cancel booking error:', updateError);
+      logger.error('Cancel booking error', updateError);
       return NextResponse.json(
         { data: null, error: 'Failed to cancel booking', success: false },
         { status: 500 },
@@ -65,7 +68,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({ data: updated, error: null, success: true });
   } catch (err) {
-    console.error('Cancel API error:', err);
+    logger.error('Cancel API error', err);
     return NextResponse.json(
       { data: null, error: 'Internal server error', success: false },
       { status: 500 },
