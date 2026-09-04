@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, CalendarDays, MapPin, Phone, User, Package, Loader2, XCircle } from 'lucide-react';
+import { ArrowLeft, CalendarDays, MapPin, Phone, User, Package, Loader2, XCircle, Scale } from 'lucide-react';
 import Link from 'next/link';
 import { useOrderDetails } from '@/features/orders/hooks/useOrderDetails';
 import { OrderTimeline } from './OrderTimeline';
@@ -93,6 +93,9 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
           <InfoRow label="Date" value={formatDate(booking.pickup_date)} />
           <InfoRow label="Time" value={booking.slot?.label ?? '—'} />
           <InfoRow label="Status" value={booking.status.charAt(0).toUpperCase() + booking.status.slice(1)} />
+          {(booking.truck_size || booking.estimated_price_range) && (
+            <InfoRow label="Vehicle Size" value={booking.truck_size ?? booking.estimated_price_range ?? '—'} />
+          )}
         </InfoCard>
 
         {/* Customer Info */}
@@ -117,29 +120,74 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
         </InfoCard>
 
         {/* Items */}
-        <InfoCard title="Items" icon={Package}>
+        <InfoCard title="Selected Scrap Items" icon={Package}>
           <div className="space-y-2">
-            {items.map((item) => (
-              <div key={item.id} className="flex items-center justify-between text-sm">
-                <div>
-                  <span className="font-medium text-on-surface">{item.scrap_item?.name}</span>
-                  <span className="ml-2 text-on-surface-variant">
-                    × {item.actual_weight ?? item.estimated_weight} {item.scrap_item?.unit}
-                  </span>
+            {items.map((item) => {
+              const isCompleted = booking.status === 'completed' && item.actual_weight != null;
+              return (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between text-sm py-2 border-b border-outline-variant/10 last:border-0"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-primary/60" />
+                    <div>
+                      <span className="font-medium text-on-surface">{item.scrap_item?.name}</span>
+                      {isCompleted && (
+                        <span className="ml-2 text-xs font-semibold text-primary">
+                          × {item.actual_weight} {item.scrap_item?.unit}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    {isCompleted ? (
+                      <span className="font-bold text-on-surface">
+                        {formatCurrency(item.subtotal)}
+                      </span>
+                    ) : (
+                      <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+                        ₹{item.rate_applied} / {item.scrap_item?.unit}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <span className="font-medium text-on-surface">
-                  {formatCurrency(item.subtotal)}
+              );
+            })}
+
+            {/* Payout / Total Section */}
+            {booking.status === 'completed' && booking.actual_value != null ? (
+              <div className="mt-3 flex items-center justify-between border-t border-outline-variant/15 pt-3">
+                <div>
+                  <span className="font-bold text-on-surface">Final Payout</span>
+                  <p className="text-xs text-on-surface-variant">Weighed with digital scale</p>
+                </div>
+                <span className="text-lg font-bold text-primary">
+                  {formatCurrency(booking.actual_value)}
                 </span>
               </div>
-            ))}
-            <div className="mt-3 flex items-center justify-between border-t border-outline-variant/15 pt-3">
-              <span className="font-semibold text-on-surface">
-                {booking.actual_value ? 'Final Total' : 'Estimated Total'}
-              </span>
-              <span className="text-lg font-bold text-primary">
-                {formatCurrency(booking.actual_value ?? booking.estimated_value ?? 0)}
-              </span>
-            </div>
+            ) : (
+              <div className="mt-4 rounded-xl bg-surface-container/60 p-3.5 border border-outline-variant/15">
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-on-surface">
+                    <Scale className="h-4 w-4 text-emerald-600" />
+                    <span>Doorstep Digital Weighing</span>
+                  </div>
+                  <span className="rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200 px-2 py-0.5 text-[10px] font-bold">
+                    Pay at Doorstep
+                  </span>
+                </div>
+                <p className="text-xs text-on-surface-variant leading-relaxed">
+                  Exact weight and total payout will be calculated at your doorstep by our pickup agent using certified digital scales.
+                </p>
+                {(booking.truck_size || booking.estimated_price_range) && (
+                  <div className="mt-2.5 flex items-center justify-between border-t border-outline-variant/10 pt-2 text-xs">
+                    <span className="text-on-surface-variant font-medium">Assigned Vehicle:</span>
+                    <span className="font-bold text-primary">{booking.truck_size ?? booking.estimated_price_range}</span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </InfoCard>
 

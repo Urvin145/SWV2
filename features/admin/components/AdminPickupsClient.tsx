@@ -50,6 +50,8 @@ interface Booking {
   pincode: string;
   status: string;
   pickup_date: string;
+  truck_size?: string | null;
+  estimated_price_range?: string | null;
   estimated_value: number | null;
   actual_value: number | null;
   weight_total: number | null;
@@ -436,11 +438,15 @@ export function AdminPickupsClient() {
                   {/* Expanded details */}
                   {isExpanded && (
                     <div className="border-t border-outline-variant/15 bg-surface-container/30 p-4 space-y-4">
-                      {/* Customer details */}
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm">
+                      {/* Customer details & Vehicle */}
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 text-sm">
                         <div>
                           <p className="text-xs font-medium text-on-surface-variant">Phone</p>
                           <p className="text-on-surface">{b.customer_phone}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-on-surface-variant">Vehicle / Load Size</p>
+                          <p className="font-semibold text-primary">{b.truck_size ?? b.estimated_price_range ?? 'Standard'}</p>
                         </div>
                         <div>
                           <p className="text-xs font-medium text-on-surface-variant">Address</p>
@@ -450,7 +456,7 @@ export function AdminPickupsClient() {
                           </p>
                         </div>
                         {b.customer_notes && (
-                          <div className="sm:col-span-2">
+                          <div className="sm:col-span-3">
                             <p className="text-xs font-medium text-on-surface-variant">Notes</p>
                             <p className="text-on-surface">{b.customer_notes}</p>
                           </div>
@@ -461,26 +467,39 @@ export function AdminPickupsClient() {
                       <div>
                         <p className="mb-2 text-xs font-medium text-on-surface-variant">Items</p>
                         <div className="space-y-1.5">
-                          {b.items.map((item) => (
-                            <div
-                              key={item.id}
-                              className="flex items-center justify-between rounded-lg bg-surface-container-lowest px-3 py-2 text-sm"
-                            >
-                              <div>
-                                <span className="font-medium text-on-surface">{item.scrap_item.name}</span>
-                                <span className="ml-1.5 text-xs text-on-surface-variant">
-                                  ({item.scrap_item.category.name})
-                                </span>
+                          {b.items.map((item) => {
+                            const isMeasured = item.actual_weight != null;
+                            return (
+                              <div
+                                key={item.id}
+                                className="flex items-center justify-between rounded-lg bg-surface-container-lowest px-3 py-2 text-sm"
+                              >
+                                <div>
+                                  <span className="font-medium text-on-surface">{item.scrap_item.name}</span>
+                                  <span className="ml-1.5 text-xs text-on-surface-variant">
+                                    ({item.scrap_item.category.name})
+                                  </span>
+                                </div>
+                                <div className="text-right text-xs">
+                                  {isMeasured ? (
+                                    <>
+                                      <p className="text-on-surface font-medium">
+                                        {item.actual_weight} {item.scrap_item.unit} × ₹{item.rate_applied}
+                                      </p>
+                                      <p className="font-bold text-primary">₹{item.subtotal}</p>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <p className="text-primary font-semibold">
+                                        Rate: ₹{item.rate_applied} / {item.scrap_item.unit}
+                                      </p>
+                                      <p className="text-on-surface-variant text-[11px]">Doorstep weighing</p>
+                                    </>
+                                  )}
+                                </div>
                               </div>
-                              <div className="text-right text-xs">
-                                <p className="text-on-surface">
-                                  {item.actual_weight ?? item.estimated_weight} {item.scrap_item.unit}
-                                  {' × ₹'}{item.rate_applied}
-                                </p>
-                                <p className="font-medium text-primary">₹{item.subtotal}</p>
-                              </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
 

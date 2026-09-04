@@ -38,13 +38,17 @@ export function OrderCard({ order }: OrderCardProps) {
 
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-on-surface-variant">Estimated Value</p>
-            <p className="text-lg font-bold text-on-surface">
-              {order.estimated_value ? formatCurrency(order.estimated_value) : '—'}
+            <p className="text-xs text-on-surface-variant">
+              {order.actual_value ? 'Final Payout' : 'Vehicle / Load'}
+            </p>
+            <p className="text-sm sm:text-base font-bold text-on-surface">
+              {order.actual_value
+                ? formatCurrency(order.actual_value)
+                : order.truck_size ?? order.estimated_price_range ?? 'Doorstep Weighing'}
             </p>
           </div>
           <div className="flex items-center gap-1 text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-            View Details
+            Track Order
             <ArrowRight className="h-3 w-3" />
           </div>
         </div>

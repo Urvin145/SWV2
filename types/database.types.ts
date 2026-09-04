@@ -177,6 +177,10 @@ export interface Database {
           customer_notes: string | null;
           cancellation_reason: string | null;
           scrap_photo_urls: string | null;
+          truck_size?: string | null;
+          estimated_price_range?: string | null;
+          estimated_weight_min?: number | null;
+          estimated_weight_max?: number | null;
           confirmed_at: string | null;
           completed_at: string | null;
           cancelled_at: string | null;
@@ -205,6 +209,10 @@ export interface Database {
           customer_notes?: string | null;
           cancellation_reason?: string | null;
           scrap_photo_urls?: string | null;
+          truck_size?: string | null;
+          estimated_price_range?: string | null;
+          estimated_weight_min?: number | null;
+          estimated_weight_max?: number | null;
           confirmed_at?: string | null;
           completed_at?: string | null;
           cancelled_at?: string | null;
@@ -233,6 +241,10 @@ export interface Database {
           customer_notes?: string | null;
           cancellation_reason?: string | null;
           scrap_photo_urls?: string | null;
+          truck_size?: string | null;
+          estimated_price_range?: string | null;
+          estimated_weight_min?: number | null;
+          estimated_weight_max?: number | null;
           confirmed_at?: string | null;
           completed_at?: string | null;
           cancelled_at?: string | null;

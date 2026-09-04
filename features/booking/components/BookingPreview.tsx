@@ -10,7 +10,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Edit2, ShoppingBag, CalendarDays, User, MapPin, Loader2, CheckCircle, IndianRupee, Copy, CheckCheck } from 'lucide-react';
+import { ArrowLeft, Edit2, ShoppingBag, CalendarDays, User, MapPin, Loader2, CheckCircle, Truck, Copy, CheckCheck, Scale } from 'lucide-react';
 import { useBookingStore } from '@/features/booking/store/bookingStore';
 import { useCreateBooking } from '@/features/booking/hooks/useCreateBooking';
 import { formatDate } from '@/lib/utils';
@@ -18,7 +18,7 @@ import { ROUTES } from '@/constants/routes';
 
 export function BookingPreview() {
   const router = useRouter();
-  const { selectedItems, schedule, customer, weightRange, setStep, prevStep, resetWizard } = useBookingStore();
+  const { selectedItems, schedule, customer, truckSize, weightRange, setStep, prevStep, resetWizard } = useBookingStore();
   const createBooking = useCreateBooking();
   const [bookingNumber, setBookingNumber] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(10);
@@ -32,6 +32,7 @@ export function BookingPreview() {
         customer,
         schedule,
         items: selectedItems,
+        truckSize: truckSize,
         priceRange: weightRange,
       });
 
@@ -144,25 +145,46 @@ export function BookingPreview() {
         >
           <div className="space-y-2">
             {selectedItems.map((item) => (
-              <div key={item.scrap_item_id} className="flex items-center gap-2 text-sm">
-                <span>{item.emoji}</span>
-                <span className="text-on-surface">{item.name}</span>
-                <span className="text-[10px] text-on-surface-variant rounded-full bg-surface-container px-2 py-0.5">
-                  {item.categoryName}
+              <div key={item.scrap_item_id} className="flex items-center justify-between text-sm py-1 border-b border-outline-variant/10 last:border-0">
+                <div className="flex items-center gap-2">
+                  <span>{item.emoji}</span>
+                  <span className="font-medium text-on-surface">{item.name}</span>
+                  <span className="text-[10px] text-on-surface-variant rounded-full bg-surface-container px-2 py-0.5">
+                    {item.categoryName}
+                  </span>
+                </div>
+                <span className="text-xs font-bold text-primary">
+                  ₹{item.rate_applied} / {item.unit}
                 </span>
               </div>
             ))}
           </div>
         </SummaryCard>
 
-        {/* Weight Range */}
+        {/* Vehicle & Capacity Summary */}
         <SummaryCard
-          icon={IndianRupee}
-          title="Estimated Weight"
+          icon={Truck}
+          title="Pickup Vehicle & Capacity"
           onEdit={() => setStep(1)}
         >
-          {weightRange ? (
-            <p className="text-lg font-bold text-primary">{weightRange.label}</p>
+          {truckSize ? (
+            <div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-base font-bold text-on-surface">{truckSize.title}</p>
+                  <p className="text-xs text-on-surface-variant">{truckSize.vehicleType}</p>
+                </div>
+                <div className="text-right">
+                  <span className="inline-flex items-center gap-1 rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-extrabold text-primary">
+                    Capacity: {truckSize.rangeLabel}
+                  </span>
+                </div>
+              </div>
+              <p className="mt-2 text-xs text-on-surface-variant bg-surface-container/50 rounded-lg p-2 flex items-center gap-1.5">
+                <Scale className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                <span>Doorstep weighing with digital scales will confirm the exact scrap weight and final payout.</span>
+              </p>
+            </div>
           ) : (
             <p className="text-sm text-on-surface-variant">Not selected</p>
           )}

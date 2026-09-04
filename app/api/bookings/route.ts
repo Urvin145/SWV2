@@ -26,6 +26,7 @@ const createBookingSchema = z.object({
   pickup_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
   customer_notes: z.string().optional(),
   scrap_photo_urls: z.string().optional(),
+  truck_size: z.string().optional(),
   estimated_price_range: z.string().optional(),
   estimated_weight_min: z.number().nonnegative().optional(),
   estimated_weight_max: z.number().nonnegative().optional(),
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { items, estimated_price_range, estimated_weight_min, estimated_weight_max, ...bookingData } = result.data;
+    const { items, truck_size, estimated_price_range, estimated_weight_min, estimated_weight_max, ...bookingData } = result.data;
 
     // Calculate estimated value from weight range midpoint (or fallback to weight×rate)
     const estimatedValue = (estimated_weight_min != null && estimated_weight_max != null)
@@ -73,6 +74,7 @@ export async function POST(request: NextRequest) {
       .from('bookings')
       .insert({
         ...bookingData,
+        truck_size: truck_size || null,
         estimated_value: estimatedValue,
         estimated_price_range: estimated_price_range || null,
         estimated_weight_min: estimated_weight_min ?? null,

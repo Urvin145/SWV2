@@ -13,10 +13,10 @@
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Check, IndianRupee } from 'lucide-react';
+import { ArrowRight, Check, Truck, Bike, Package, CheckCircle2 } from 'lucide-react';
 import { useRates } from '@/features/rates/hooks/useRates';
 import { useCategories } from '@/features/rates/hooks/useCategories';
-import { useBookingStore, type SelectedScrapItem, WEIGHT_RANGES } from '@/features/booking/store/bookingStore';
+import { useBookingStore, type SelectedScrapItem, TRUCK_OPTIONS, type TruckOption } from '@/features/booking/store/bookingStore';
 import { ITEM_VISUAL_MAP, CATEGORY_BADGE_STYLES } from '@/constants/scrapItemMedia';
 import { formatCurrency, cn } from '@/lib/utils';
 
@@ -24,7 +24,7 @@ export function ScrapSelector() {
   const [activeCategory, setActiveCategory] = useState('all');
   const { data: rates = [], isLoading: ratesLoading } = useRates(activeCategory);
   const { data: categories = [], isLoading: catsLoading } = useCategories();
-  const { selectedItems, addItem, removeItem, weightRange, setWeightRange, nextStep } = useBookingStore();
+  const { selectedItems, addItem, removeItem, truckSize, setTruckSize, nextStep } = useBookingStore();
 
   const allCats = useMemo(() => [{ slug: 'all', name: 'All Categories' }, ...categories], [categories]);
 
@@ -49,7 +49,7 @@ export function ScrapSelector() {
     }
   };
 
-  const canProceed = selectedItems.length > 0 && weightRange !== null;
+  const canProceed = selectedItems.length > 0 && truckSize !== null;
 
   return (
     <div>
@@ -202,7 +202,7 @@ export function ScrapSelector() {
         )}
       </AnimatePresence>
 
-      {/* Approx Price Range Picker */}
+      {/* Vehicle / Truck Size Picker */}
       <AnimatePresence>
         {selectedItems.length > 0 && (
           <motion.div
@@ -212,32 +212,95 @@ export function ScrapSelector() {
             className="mt-6 overflow-hidden"
           >
             <div className="rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-5 sm:p-6 shadow-sm">
-              <div className="mb-3 flex items-center gap-2">
-                <IndianRupee className="h-4 w-4 text-primary" />
-                <h3 className="text-sm font-bold text-on-surface">
-                  Approximate Weight of Your Scrap
-                </h3>
+              <div className="mb-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Truck className="h-4 w-4" />
+                  </div>
+                  <h3 className="text-sm sm:text-base font-bold text-on-surface">
+                    Select Truck / Vehicle Size
+                  </h3>
+                </div>
+                <span className="inline-flex items-center gap-1 self-start sm:self-auto rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700 border border-emerald-200">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Digital scale included with every vehicle
+                </span>
               </div>
               <p className="mb-4 text-xs text-on-surface-variant">
-                Select an estimated weight range. This helps us dispatch the right pickup mini-tempo vehicle.
+                Select the vehicle tier suited for your load. Suggested weight capacity in kg is displayed beside each vehicle.
               </p>
 
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {WEIGHT_RANGES.map((range) => {
-                  const isActive = weightRange?.label === range.label;
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {TRUCK_OPTIONS.map((truck) => {
+                  const isActive = truckSize?.id === truck.id;
+                  const Icon = truck.id === 'micro' ? Bike : Truck;
+
                   return (
                     <button
-                      key={range.label}
+                      key={truck.id}
                       type="button"
-                      onClick={() => setWeightRange(isActive ? null : { ...range })}
+                      onClick={() => setTruckSize(isActive ? null : truck)}
                       className={cn(
-                        'rounded-xl border-2 px-3 py-3 text-xs sm:text-sm font-semibold transition-all text-center',
+                        'group relative flex flex-col justify-between rounded-2xl border-2 p-4 text-left transition-all duration-200',
                         isActive
-                          ? 'border-primary bg-primary/10 text-primary shadow-sm'
-                          : 'border-outline-variant/20 bg-surface-container text-on-surface-variant hover:border-primary/30 hover:text-on-surface',
+                          ? 'border-primary bg-primary/5 shadow-md ring-2 ring-primary/20'
+                          : 'border-outline-variant/20 bg-surface-container/30 hover:border-primary/40 hover:bg-surface-container hover:shadow-sm',
                       )}
                     >
-                      {range.label}
+                      {/* Top row: Icon + Badge + Check */}
+                      <div className="mb-3 flex items-start justify-between">
+                        <div
+                          className={cn(
+                            'flex h-10 w-10 items-center justify-center rounded-xl transition-colors',
+                            isActive
+                              ? 'bg-primary text-on-primary shadow-sm'
+                              : 'bg-surface-container-high text-on-surface-variant group-hover:bg-primary/10 group-hover:text-primary',
+                          )}
+                        >
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          {truck.badge && (
+                            <span
+                              className={cn(
+                                'rounded-full px-2 py-0.5 text-[10px] font-bold',
+                                isActive
+                                  ? 'bg-primary/15 text-primary border border-primary/30'
+                                  : 'bg-surface-container-high text-on-surface-variant/80',
+                              )}
+                            >
+                              {truck.badge}
+                            </span>
+                          )}
+                          <div
+                            className={cn(
+                              'flex h-5 w-5 items-center justify-center rounded-full border transition-all',
+                              isActive
+                                ? 'border-primary bg-primary text-on-primary'
+                                : 'border-outline-variant/40 bg-white/80',
+                            )}
+                          >
+                            {isActive && <Check className="h-3 w-3 stroke-[3]" />}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Middle: Title & Suggested Capacity in kg */}
+                      <div>
+                        <div className="flex items-baseline justify-between gap-1">
+                          <h4 className="text-sm font-bold text-on-surface">{truck.title}</h4>
+                        </div>
+
+                        {/* Suggested kg capacity badge */}
+                        <div className="mt-1.5 inline-flex items-center gap-1 rounded-lg bg-surface-container-lowest px-2 py-1 border border-outline-variant/15">
+                          <span className="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider">Suggested:</span>
+                          <span className="text-xs font-extrabold text-primary">{truck.rangeLabel}</span>
+                        </div>
+
+                        <p className="mt-2 text-[11px] leading-relaxed text-on-surface-variant">
+                          {truck.subtitle}
+                        </p>
+                      </div>
                     </button>
                   );
                 })}
@@ -247,15 +310,23 @@ export function ScrapSelector() {
         )}
       </AnimatePresence>
 
-      {/* Bottom bar: selected count + next */}
+      {/* Bottom bar: selected count + truck size + next */}
       <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-5 sm:flex-row sm:items-center sm:justify-between shadow-sm">
         <div>
           <p className="text-sm text-on-surface-variant">
             <strong className="text-on-surface text-base">{selectedItems.length}</strong> item{selectedItems.length !== 1 ? 's' : ''} selected
           </p>
-          {weightRange && (
-            <p className="text-sm font-bold text-primary">
-              Estimated Load: {weightRange.label}
+          {truckSize ? (
+            <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
+              <span className="font-semibold text-on-surface-variant">Vehicle:</span>
+              <span className="font-bold text-primary">{truckSize.title}</span>
+              <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-xs font-bold text-primary">
+                ({truckSize.rangeLabel})
+              </span>
+            </div>
+          ) : (
+            <p className="mt-0.5 text-xs font-medium text-amber-600">
+              * Please select a vehicle size above to proceed
             </p>
           )}
         </div>

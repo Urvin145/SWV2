@@ -12,6 +12,10 @@ export interface OrderSummary {
   pickup_date: string;
   estimated_value: number | null;
   actual_value: number | null;
+  truck_size?: string | null;
+  estimated_price_range?: string | null;
+  estimated_weight_min?: number | null;
+  estimated_weight_max?: number | null;
   created_at: string;
   slot: {
     id: string;

@@ -4,7 +4,7 @@
  */
 
 import { createClient } from '@/services/supabase/client';
-import type { SelectedScrapItem, ScheduleData, CustomerData, WeightRange } from '@/features/booking/store/bookingStore';
+import type { SelectedScrapItem, ScheduleData, CustomerData, WeightRange, TruckOption } from '@/features/booking/store/bookingStore';
 
 export interface SlotWithAvailability {
   id: string;
@@ -22,6 +22,7 @@ export interface CreateBookingPayload {
   customer: CustomerData;
   schedule: ScheduleData;
   items: SelectedScrapItem[];
+  truckSize?: TruckOption | null;
   priceRange?: WeightRange | null;
 }
 
@@ -51,6 +52,10 @@ export async function fetchSlots(date: string): Promise<SlotWithAvailability[]> 
  * Create a new booking via the API.
  */
 export async function createBooking(payload: CreateBookingPayload): Promise<BookingResult> {
+  const truckSizeLabel = payload.truckSize
+    ? `${payload.truckSize.title} (${payload.truckSize.rangeLabel})`
+    : undefined;
+
   const body = {
     customer_name: payload.customer.customer_name,
     customer_phone: payload.customer.customer_phone,
@@ -62,11 +67,10 @@ export async function createBooking(payload: CreateBookingPayload): Promise<Book
     slot_id: payload.schedule.slot_id,
     pickup_date: payload.schedule.pickup_date,
     customer_notes: payload.customer.customer_notes || undefined,
-    estimated_price_range: payload.priceRange
-      ? `${payload.priceRange.label}`
-      : undefined,
-    estimated_weight_min: payload.priceRange?.min,
-    estimated_weight_max: payload.priceRange?.max,
+    truck_size: truckSizeLabel,
+    estimated_price_range: truckSizeLabel || (payload.priceRange ? `${payload.priceRange.label}` : undefined),
+    estimated_weight_min: payload.truckSize?.minWeight ?? payload.priceRange?.min,
+    estimated_weight_max: payload.truckSize?.maxWeight ?? payload.priceRange?.max,
     items: payload.items.map((item) => ({
       scrap_item_id: item.scrap_item_id,
       estimated_weight: item.estimated_weight,
