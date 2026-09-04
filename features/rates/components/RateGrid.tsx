@@ -20,7 +20,7 @@ interface RateGridProps {
 export function RateGrid({ items, isLoading, searchQuery }: RateGridProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {Array.from({ length: 8 }).map((_, i) => (
           <ScrapCardSkeleton key={i} />
         ))}
@@ -43,7 +43,7 @@ export function RateGrid({ items, isLoading, searchQuery }: RateGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
       <AnimatePresence mode="popLayout">
         {items.map((item, index) => (
           <motion.div

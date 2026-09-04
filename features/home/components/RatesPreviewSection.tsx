@@ -1,90 +1,145 @@
 /**
  * Rates Preview Section
- * Shows top 6-8 scrap rate cards on the homepage with a "View All" link.
- * Fetches from Supabase server-side for SEO, with staggered animations.
+ * Shows top 8 scrap rate cards on the homepage with high-legibility visual-first cards.
+ * Features: 3D emoji, category pill, bold title, big price, and cut-out photography.
  */
 
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/common/AnimatedSection';
 import { ROUTES } from '@/constants/routes';
-import { formatCurrency } from '@/lib/utils';
+import { ScrapCard } from '@/features/rates/components/ScrapCard';
 
 interface RatePreviewItem {
   name: string;
+  slug: string;
   unit: string;
   price: number;
-  category: string;
-  emoji: string;
+  categoryName: string;
+  categorySlug: string;
+  description: string;
 }
 
-/** Static preview data — will be connected to Supabase in Sprint 4 */
 const previewRates: RatePreviewItem[] = [
-  { name: 'Newspaper', unit: 'kg', price: 14, category: 'Paper', emoji: '📰' },
-  { name: 'Cardboard', unit: 'kg', price: 8, category: 'Paper', emoji: '📦' },
-  { name: 'Copper', unit: 'kg', price: 425, category: 'Metal', emoji: '🔩' },
-  { name: 'Iron', unit: 'kg', price: 28, category: 'Metal', emoji: '⚙️' },
-  { name: 'Aluminium', unit: 'kg', price: 105, category: 'Metal', emoji: '🥫' },
-  { name: 'PET Bottles', unit: 'kg', price: 10, category: 'Plastic', emoji: '♻️' },
-  { name: 'Laptops', unit: 'piece', price: 200, category: 'E-Waste', emoji: '💻' },
-  { name: 'Brass', unit: 'kg', price: 305, category: 'Metal', emoji: '🔔' },
+  {
+    name: 'Newspaper',
+    slug: 'newspaper',
+    unit: 'kg',
+    price: 14,
+    categoryName: 'Paper',
+    categorySlug: 'paper',
+    description: 'Old newspapers and dailies',
+  },
+  {
+    name: 'Cardboard',
+    slug: 'cardboard',
+    unit: 'kg',
+    price: 8,
+    categoryName: 'Paper',
+    categorySlug: 'paper',
+    description: 'Cardboard boxes and corrugated sheets',
+  },
+  {
+    name: 'Copper',
+    slug: 'copper',
+    unit: 'kg',
+    price: 425,
+    categoryName: 'Metal',
+    categorySlug: 'metal',
+    description: 'Copper wire, pipes, and fittings',
+  },
+  {
+    name: 'Iron',
+    slug: 'iron',
+    unit: 'kg',
+    price: 28,
+    categoryName: 'Metal',
+    categorySlug: 'metal',
+    description: 'Iron rods, pipes, sheets, and utensils',
+  },
+  {
+    name: 'Aluminium',
+    slug: 'aluminium',
+    unit: 'kg',
+    price: 105,
+    categoryName: 'Metal',
+    categorySlug: 'metal',
+    description: 'Aluminium cans, foil, and utensils',
+  },
+  {
+    name: 'PET Bottles',
+    slug: 'pet-bottles',
+    unit: 'kg',
+    price: 10,
+    categoryName: 'Plastic',
+    categorySlug: 'plastic',
+    description: 'Mineral water and soft drink bottles',
+  },
+  {
+    name: 'Laptops & Computers',
+    slug: 'laptops-computers',
+    unit: 'piece',
+    price: 200,
+    categoryName: 'E-Waste',
+    categorySlug: 'e-waste',
+    description: 'Old laptops, desktops, and monitors',
+  },
+  {
+    name: 'Brass',
+    slug: 'brass',
+    unit: 'kg',
+    price: 305,
+    categoryName: 'Metal',
+    categorySlug: 'metal',
+    description: 'Brass taps, fittings, and decorative items',
+  },
 ];
 
 export function RatesPreviewSection() {
   return (
-    <section className="bg-surface-container px-4 py-20 sm:px-6 lg:px-8">
+    <section className="bg-surface-container px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <AnimatedSection>
           <div className="mb-14 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <span className="mb-3 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
-                Today&apos;s Rates
-              </span>
-              <h2 className="font-heading text-3xl font-bold text-on-surface sm:text-4xl">
-                Scrap Rates
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>Today&apos;s Verified Rates</span>
+              </div>
+              <h2 className="font-heading text-3xl font-extrabold text-on-surface sm:text-4xl">
+                Bangalore Scrap Rates
               </h2>
-              <p className="mt-2 text-on-surface-variant">
-                Transparent pricing, updated regularly
+              <p className="mt-2 text-base text-on-surface-variant">
+                Live market prices with 100% digital weighing scale guarantee
               </p>
             </div>
             <Link
               href={ROUTES.RATES}
-              className="group flex items-center gap-2 font-semibold text-primary transition-colors hover:text-primary-container"
+              className="group inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-surface-container-lowest px-5 py-2.5 text-sm font-bold text-primary shadow-sm transition-all hover:bg-primary hover:text-on-primary"
             >
-              View All Rates
+              <span>View All 21+ Scrap Rates</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </AnimatedSection>
 
         <StaggerContainer
-          className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-5"
-          staggerDelay={0.08}
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6"
+          staggerDelay={0.06}
         >
           {previewRates.map((item) => (
-            <StaggerItem key={item.name}>
-              <div className="group rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-md">
-                {/* Emoji + Category */}
-                <div className="mb-3 flex items-center justify-between">
-                  <span className="text-2xl">{item.emoji}</span>
-                  <span className="rounded-full bg-surface-container px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-on-surface-variant">
-                    {item.category}
-                  </span>
-                </div>
-
-                {/* Item name */}
-                <h3 className="mb-1 font-semibold text-on-surface">{item.name}</h3>
-
-                {/* Price */}
-                <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-bold text-primary">
-                    {formatCurrency(item.price)}
-                  </span>
-                  <span className="text-xs text-on-surface-variant">/{item.unit}</span>
-                </div>
-              </div>
+            <StaggerItem key={item.slug}>
+              <ScrapCard
+                name={item.name}
+                slug={item.slug}
+                pricePerUnit={item.price}
+                unit={item.unit}
+                categoryName={item.categoryName}
+                categorySlug={item.categorySlug}
+                description={item.description}
+              />
             </StaggerItem>
           ))}
         </StaggerContainer>
