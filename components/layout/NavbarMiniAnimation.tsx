@@ -1,10 +1,12 @@
 /**
  * Navbar Mini Animation Component
  * Sits at the very top of the header.
- * Layout:
- * - Left: Promotional / eco guarantee text
- * - Center: Animated mini-tempo truck collecting scrap & dropping coins
- * - Right: Social media icons (Instagram, Facebook, X/Twitter, WhatsApp)
+ * Responsive Layout:
+ * - Mobile: Only the centered mini-tempo scrap animation is visible
+ * - Desktop/Tablet:
+ *   - Left: Promotional / eco guarantee text
+ *   - Center: Animated mini-tempo truck collecting scrap & dropping coins
+ *   - Right: Social media icons (Instagram, Facebook, X/Twitter, WhatsApp)
  */
 
 'use client';
@@ -54,15 +56,15 @@ export function NavbarMiniAnimation() {
     <div className="navbar-top-track relative overflow-hidden border-b border-primary/15 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white select-none">
       <div className="mx-auto flex h-9 max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8 text-xs">
         
-        {/* 1. Left Side: Text descriptor */}
+        {/* 1. Left Side: Text descriptor (Hidden on mobile, visible on desktop/tablet) */}
         <div className="hidden md:flex items-center gap-2 text-[11px] font-medium text-emerald-200/90 whitespace-nowrap flex-shrink-0">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
           <span>Scrap collected • Instant UPI cash paid • 100% recycled</span>
         </div>
 
-        {/* 2. Center: Animated Truck & Scrap Stage */}
-        <div className="flex items-center justify-center flex-1 overflow-hidden px-1 sm:px-4">
-          <div className="nav-mini-stage relative h-7 w-64 sm:w-80 flex-shrink-0">
+        {/* 2. Center: Animated Truck & Scrap Stage (Full width & centered on mobile) */}
+        <div className="flex items-center justify-center w-full md:flex-1 overflow-hidden px-1 sm:px-4">
+          <div className="nav-mini-stage relative h-7 w-64 sm:w-80 flex-shrink-0 mx-auto">
             {/* Curbside Ground Track */}
             <div className="nav-ground-line" />
 
@@ -107,8 +109,8 @@ export function NavbarMiniAnimation() {
           </div>
         </div>
 
-        {/* 3. Right Side: Social Media Icons */}
-        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        {/* 3. Right Side: Social Media Icons (Hidden on mobile, visible on desktop/tablet) */}
+        <div className="hidden md:flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           <a
             href={APP_CONFIG.social.instagram}
             target="_blank"
