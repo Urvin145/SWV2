@@ -16,10 +16,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 export async function POST(request: NextRequest) {
   try {
     // Fail closed: if credentials aren't configured, deny all logins
-    const adminUsername = process.env.ADMIN_USERNAME || ADMIN_USERNAME;
-    const adminPassword = process.env.ADMIN_PASSWORD || ADMIN_PASSWORD;
-
-    if (!adminUsername || !adminPassword) {
+    if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
       logger.error('Admin credentials not configured in environment variables');
       return NextResponse.json(
         { error: 'Admin login is not configured', success: false },
@@ -37,7 +34,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (username !== adminUsername || password !== adminPassword) {
+    if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
       logger.warn('Failed login attempt');
       return NextResponse.json(
         { error: 'Invalid credentials', success: false },
