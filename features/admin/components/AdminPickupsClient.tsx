@@ -81,6 +81,7 @@ const NEXT_STATUS: Record<string, string | null> = {
 const STATUS_FILTERS = ['all', 'pending', 'confirmed', 'scheduled', 'completed', 'cancelled'];
 
 /* ────────── Complete Pickup Modal ────────── */
+/* ────────── Complete Pickup Modal ────────── */
 function CompletePickupModal({
   booking,
   onClose,
@@ -93,6 +94,7 @@ function CompletePickupModal({
   const [weights, setWeights] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Init weights from estimated
   useEffect(() => {
@@ -105,8 +107,46 @@ function CompletePickupModal({
 
   const totalValue = booking.items.reduce((sum, item) => {
     const w = parseFloat(weights[item.id] || '0');
-    return sum + w * item.rate_applied;
+    return sum + (isNaN(w) ? 0 : w * item.rate_applied);
   }, 0);
+
+  const totalKg = booking.items.reduce((sum, item) => {
+    if (item.scrap_item.unit === 'kg') {
+      const w = parseFloat(weights[item.id] || '0');
+      return sum + (isNaN(w) ? 0 : w);
+    }
+    return sum;
+  }, 0);
+
+  const itemsWeighedCount = booking.items.filter((item) => {
+    const w = parseFloat(weights[item.id] || '0');
+    return !isNaN(w) && w > 0;
+  }).length;
+
+  const filteredItems = booking.items.filter((item) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      item.scrap_item.name.toLowerCase().includes(q) ||
+      item.scrap_item.category.name.toLowerCase().includes(q)
+    );
+  });
+
+  const handleFillAllEstimates = () => {
+    const updated: Record<string, string> = {};
+    for (const item of booking.items) {
+      updated[item.id] = String(item.estimated_weight);
+    }
+    setWeights(updated);
+  };
+
+  const handleClearAll = () => {
+    const updated: Record<string, string> = {};
+    for (const item of booking.items) {
+      updated[item.id] = '0';
+    }
+    setWeights(updated);
+  };
 
   const handleSubmit = async () => {
     setSubmitting(true);
@@ -114,7 +154,7 @@ function CompletePickupModal({
     try {
       const items = booking.items.map((item) => ({
         booking_item_id: item.id,
-        actual_weight: parseFloat(weights[item.id] || '0'),
+        actual_weight: parseFloat(weights[item.id] || '0') || 0,
       }));
 
       const res = await fetch(`/api/admin/bookings/${booking.id}/complete`, {
@@ -134,90 +174,197 @@ function CompletePickupModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/60 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/60 p-3 sm:p-4 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="w-full max-w-lg rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-6 shadow-xl"
+        className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl border border-outline-variant/20 bg-surface-container-lowest shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-center justify-between">
+        {/* Modal Header */}
+        <div className="shrink-0 p-4 sm:p-5 border-b border-outline-variant/15 bg-surface-container/30 flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-bold text-on-surface">Complete Pickup</h3>
-            <p className="text-sm text-on-surface-variant">
-              #{booking.booking_number} — {booking.customer_name}
+            <div className="flex items-center gap-2">
+              <h3 className="text-base sm:text-lg font-bold text-on-surface">Record Doorstep Weights</h3>
+              <span className="rounded-full bg-primary/10 text-primary px-2 py-0.5 text-xs font-semibold">
+                {booking.items.length} {booking.items.length === 1 ? 'item' : 'items'}
+              </span>
+            </div>
+            <p className="text-xs text-on-surface-variant mt-0.5">
+              #{booking.booking_number} — <span className="font-semibold text-on-surface">{booking.customer_name}</span> ({booking.customer_phone})
             </p>
           </div>
-          <button onClick={onClose} className="rounded-lg p-1 hover:bg-surface-container transition">
-            <X className="h-5 w-5 text-on-surface-variant" />
-          </button>
-        </div>
-
-        {/* Items weight entry */}
-        <div className="space-y-3">
-          {booking.items.map((item) => (
-            <div
-              key={item.id}
-              className="rounded-xl border border-outline-variant/15 bg-surface-container p-4"
-            >
-              <div className="mb-2 flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-on-surface">{item.scrap_item.name}</p>
-                  <p className="text-xs text-on-surface-variant">
-                    {item.scrap_item.category.name} · ₹{item.rate_applied}/{item.scrap_item.unit}
-                  </p>
-                </div>
-                <p className="text-xs text-on-surface-variant">
-                  Est: {item.estimated_weight} {item.scrap_item.unit}
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Scale className="h-4 w-4 text-primary" />
-                <input
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  value={weights[item.id] || ''}
-                  onChange={(e) => setWeights({ ...weights, [item.id]: e.target.value })}
-                  className="flex-1 rounded-lg border border-outline-variant/30 bg-surface-container-lowest px-3 py-1.5 text-sm text-on-surface outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
-                  placeholder="Actual weight"
-                />
-                <span className="text-xs text-on-surface-variant">{item.scrap_item.unit}</span>
-              </div>
-              <p className="mt-1 text-right text-xs font-medium text-primary">
-                ₹{(parseFloat(weights[item.id] || '0') * item.rate_applied).toLocaleString('en-IN')}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Total */}
-        <div className="mt-4 flex items-center justify-between rounded-xl bg-primary/10 p-4">
-          <span className="text-sm font-medium text-on-surface">Total Payout</span>
-          <span className="text-xl font-bold text-primary">₹{totalValue.toLocaleString('en-IN')}</span>
-        </div>
-
-        {error && (
-          <p className="mt-3 text-sm text-error">{error}</p>
-        )}
-
-        <div className="mt-5 flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl border border-outline-variant/30 py-2.5 text-sm font-medium text-on-surface-variant hover:bg-surface-container transition"
+            className="rounded-lg p-1.5 hover:bg-surface-container transition text-on-surface-variant hover:text-on-surface"
+            aria-label="Close modal"
           >
-            Cancel
+            <X className="h-5 w-5" />
           </button>
-          <button
-            onClick={handleSubmit}
-            disabled={submitting}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-medium text-on-primary hover:bg-primary-container transition disabled:opacity-50"
-          >
-            {submitting ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Check className="h-4 w-4" />
-            )}
-            Mark Complete
-          </button>
+        </div>
+
+        {/* Quick Toolbar (Search & Bulk Fill) */}
+        <div className="shrink-0 px-4 sm:px-5 py-2.5 bg-surface-container-lowest border-b border-outline-variant/10 flex flex-wrap items-center justify-between gap-2">
+          {booking.items.length > 3 ? (
+            <div className="relative flex-1 min-w-[180px]">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-on-surface-variant" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search scrap item..."
+                className="w-full rounded-lg border border-outline-variant/20 bg-surface-container/40 pl-8 pr-3 py-1 text-xs text-on-surface outline-none focus:border-primary focus:bg-surface-container-lowest"
+              />
+            </div>
+          ) : (
+            <p className="text-xs text-on-surface-variant">
+              Enter measured weights from digital scale for each scrap item below:
+            </p>
+          )}
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={handleFillAllEstimates}
+              className="rounded-md border border-outline-variant/20 bg-surface-container/40 px-2.5 py-1 text-[11px] font-medium text-on-surface hover:bg-surface-container transition"
+            >
+              Copy All Estimates
+            </button>
+            <button
+              type="button"
+              onClick={handleClearAll}
+              className="rounded-md border border-outline-variant/20 bg-surface-container/40 px-2 py-1 text-[11px] font-medium text-on-surface-variant hover:text-error hover:bg-surface-container transition"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+
+        {/* Scrollable Items Weight Entry Bar */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-2.5 min-h-0">
+          {filteredItems.length === 0 ? (
+            <div className="py-8 text-center text-sm text-on-surface-variant">
+              No scrap items match &ldquo;{searchQuery}&rdquo;
+            </div>
+          ) : (
+            filteredItems.map((item, idx) => {
+              const currentWeight = weights[item.id] ?? '';
+              const numWeight = parseFloat(currentWeight || '0');
+              const subtotal = (isNaN(numWeight) ? 0 : numWeight) * item.rate_applied;
+
+              return (
+                <div
+                  key={item.id}
+                  className="rounded-xl border border-outline-variant/15 bg-surface-container/40 p-3 sm:p-3.5 transition hover:border-outline-variant/40"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    {/* Item Information */}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs font-bold text-on-surface-variant">#{idx + 1}</span>
+                        <span className="font-semibold text-sm text-on-surface truncate">{item.scrap_item.name}</span>
+                        <span className="rounded-md bg-surface-container-high px-2 py-0.5 text-[10px] font-medium text-on-surface-variant">
+                          {item.scrap_item.category.name}
+                        </span>
+                        <span className="rounded-md bg-primary/10 text-primary px-2 py-0.5 text-[11px] font-bold">
+                          ₹{item.rate_applied}/{item.scrap_item.unit}
+                        </span>
+                      </div>
+                      <div className="mt-1 flex items-center gap-2 text-xs text-on-surface-variant">
+                        <span>Customer Est: <strong className="text-on-surface">{item.estimated_weight} {item.scrap_item.unit}</strong></span>
+                        {parseFloat(currentWeight || '0') !== item.estimated_weight && (
+                          <button
+                            type="button"
+                            onClick={() => setWeights({ ...weights, [item.id]: String(item.estimated_weight) })}
+                            className="text-[11px] font-semibold text-primary hover:underline"
+                          >
+                            (Use Est)
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Weight Input Bar & Real-time Subtotal */}
+                    <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t border-outline-variant/10 sm:border-0">
+                      <div className="relative flex items-center">
+                        <div className="pointer-events-none absolute left-2.5 flex items-center text-primary">
+                          <Scale className="h-4 w-4" />
+                        </div>
+                        <input
+                          type="number"
+                          step="any"
+                          min="0"
+                          value={currentWeight}
+                          onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                          onChange={(e) => setWeights({ ...weights, [item.id]: e.target.value })}
+                          className="w-32 sm:w-36 rounded-lg border border-outline-variant/30 bg-surface-container-lowest pl-8 pr-10 py-1.5 text-sm font-semibold text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          placeholder="0.0"
+                        />
+                        <span className="pointer-events-none absolute right-2.5 text-xs font-semibold text-on-surface-variant">
+                          {item.scrap_item.unit}
+                        </span>
+                      </div>
+
+                      <div className="w-20 text-right">
+                        <p className="text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold">Subtotal</p>
+                        <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+                          ₹{subtotal.toLocaleString('en-IN')}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Sticky Modal Footer with Live Grand Total */}
+        <div className="shrink-0 p-4 sm:p-5 border-t border-outline-variant/15 bg-surface-container/60">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3 text-xs text-on-surface-variant">
+              <span className="rounded-md bg-surface-container px-2 py-1 font-semibold text-on-surface">
+                {itemsWeighedCount} of {booking.items.length} Weighed
+              </span>
+              {totalKg > 0 && (
+                <span>
+                  Total Weight: <strong className="text-on-surface font-bold">{totalKg.toFixed(1)} kg</strong>
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 sm:text-right">
+              <span className="text-xs font-medium text-on-surface-variant">Total Doorstep Payout:</span>
+              <span className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">
+                ₹{totalValue.toLocaleString('en-IN')}
+              </span>
+            </div>
+          </div>
+
+          {error && (
+            <p className="mb-3 text-sm text-error font-medium">{error}</p>
+          )}
+
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-xl border border-outline-variant/30 py-2.5 text-sm font-medium text-on-surface-variant hover:bg-surface-container transition"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={submitting}
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 transition disabled:opacity-50 shadow-md shadow-emerald-600/20"
+            >
+              {submitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Check className="h-4 w-4" />
+              )}
+              Save &amp; Complete Pickup
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -504,7 +651,7 @@ export function AdminPickupsClient() {
                           )}
                         </div>
 
-                        <div className="space-y-1.5">
+                        <div className={cn('space-y-1.5', b.items.length > 5 && 'max-h-72 overflow-y-auto pr-1')}>
                           {b.items.map((item) => {
                             const isMeasured = item.actual_weight != null;
                             return (
