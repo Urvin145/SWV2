@@ -19,8 +19,10 @@ import {
   Plus,
   FolderPlus,
   PackagePlus,
+  FileSpreadsheet,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { BulkRatesUploadModal } from './BulkRatesUploadModal';
 
 /* ────────── Types ────────── */
 interface Rate {
@@ -507,6 +509,7 @@ export function AdminRatesClient() {
   // Modal states
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [showAddItem, setShowAddItem] = useState(false);
+  const [showBulkUpload, setShowBulkUpload] = useState(false);
 
   const fetchRates = useCallback(async () => {
     setLoading(true);
@@ -577,7 +580,15 @@ export function AdminRatesClient() {
             Manage categories, items, and pricing
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setShowBulkUpload(true)}
+            className="flex items-center gap-1.5 rounded-xl border border-emerald-600/30 bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 px-3.5 py-2 text-sm font-semibold hover:bg-emerald-100 dark:hover:bg-emerald-950/60 transition shadow-sm"
+            title="Download template and bulk update rates via Excel or CSV"
+          >
+            <FileSpreadsheet className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <span>Excel Update</span>
+          </button>
           <button
             onClick={() => setShowAddCategory(true)}
             className="flex items-center gap-1.5 rounded-xl border border-outline-variant/30 bg-surface-container-lowest px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container hover:text-primary transition"
@@ -704,6 +715,18 @@ export function AdminRatesClient() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* Bulk Excel Rates Modal */}
+      {showBulkUpload && (
+        <BulkRatesUploadModal
+          items={items}
+          onClose={() => setShowBulkUpload(false)}
+          onUpdated={() => {
+            fetchRates();
+            fetchCategories();
+          }}
+        />
       )}
     </div>
   );
