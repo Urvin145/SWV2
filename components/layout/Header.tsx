@@ -14,6 +14,7 @@ import { Menu, X, Recycle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ROUTES, NAV_LINKS } from '@/constants/routes';
 import { MobileNav } from './MobileNav';
+import { NavbarMiniAnimation } from './NavbarMiniAnimation';
 
 export function Header() {
   const pathname = usePathname();
@@ -21,6 +22,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-outline-variant/30 bg-surface-container-lowest/80 backdrop-blur-md">
+      {/* Top micro-animation: electric mini tempo, jumping scrap, and money dropper */}
+      <NavbarMiniAnimation />
+
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href={ROUTES.HOME} className="flex items-center gap-2">
