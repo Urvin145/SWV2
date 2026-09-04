@@ -48,21 +48,40 @@ export async function POST(request: NextRequest) {
         continue;
       }
 
-      // Mark any existing active rates for this item as expired
-      const { error: expireErr } = await supabase
+      // 1. Try to update the existing current rate row in place
+      const { data: updatedCurrent, error: updateCurrentErr } = await supabase
         .from('scrap_rates')
         .update({
-          is_current: false,
-          effective_to: now,
+          price_per_unit: price,
+          effective_from: now,
+          is_current: true,
         })
         .eq('scrap_item_id', u.scrap_item_id)
-        .eq('is_current', true);
+        .eq('is_current', true)
+        .select('id');
 
-      if (expireErr) {
-        logger.warn(`Failed to expire old rate for ${u.scrap_item_id}`, { error: expireErr.message });
+      if (!updateCurrentErr && updatedCurrent && updatedCurrent.length > 0) {
+        updatedCount++;
+        continue;
       }
 
-      // Insert new current rate
+      // 2. If no current rate found, update the most recent rate for this item and reactivate it
+      const { data: updatedAny, error: updateAnyErr } = await supabase
+        .from('scrap_rates')
+        .update({
+          price_per_unit: price,
+          effective_from: now,
+          is_current: true,
+        })
+        .eq('scrap_item_id', u.scrap_item_id)
+        .select('id');
+
+      if (!updateAnyErr && updatedAny && updatedAny.length > 0) {
+        updatedCount++;
+        continue;
+      }
+
+      // 3. Fallback: if no rate record exists at all for this scrap item, attempt INSERT
       const { error: insertErr } = await supabase
         .from('scrap_rates')
         .insert({
@@ -73,23 +92,27 @@ export async function POST(request: NextRequest) {
           effective_from: now,
         });
 
-      if (insertErr) {
-        logger.error(`Failed to insert new rate for ${u.scrap_item_id}`, { error: insertErr.message });
-        errors.push(`Failed to update item ${u.scrap_item_id}`);
-      } else {
+      if (!insertErr) {
         updatedCount++;
+      } else {
+        const errorDetail = insertErr.message || updateCurrentErr?.message || updateAnyErr?.message || 'Database update failed';
+        logger.error(`Failed to update or insert rate for ${u.scrap_item_id}`, { error: errorDetail });
+        errors.push(errorDetail);
       }
     }
 
     logger.info(`Bulk updated ${updatedCount} scrap rates. (Errors: ${errors.length})`);
 
+    const hasSuccess = updatedCount > 0;
+    const finalError = !hasSuccess && errors.length > 0 ? errors[0] : null;
+
     return NextResponse.json({
       data: { updatedCount, errors },
-      error: errors.length > 0 && updatedCount === 0 ? 'Failed to apply any updates' : null,
-      success: updatedCount > 0 || errors.length === 0,
+      error: finalError,
+      success: hasSuccess,
     });
   } catch (err: any) {
-    logger.error('Bulk update API error', err);
+    logger.error('Bulk update API error', { error: err?.message });
     return NextResponse.json(
       { data: null, error: err?.message || 'Internal server error', success: false },
       { status: 500 },

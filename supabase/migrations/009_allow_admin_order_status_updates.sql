@@ -25,8 +25,9 @@ CREATE POLICY "anon_update_booking_items"
   USING (true)
   WITH CHECK (true);
 
--- 3. Scrap Rates & Items: Allow updating rates in admin panel
+-- 3. Scrap Rates & Items: Allow updating and inserting rates in admin panel
 DROP POLICY IF EXISTS "anon_update_scrap_rates" ON public.scrap_rates;
+DROP POLICY IF EXISTS "anon_insert_scrap_rates" ON public.scrap_rates;
 
 CREATE POLICY "anon_update_scrap_rates"
   ON public.scrap_rates FOR UPDATE
@@ -34,10 +35,22 @@ CREATE POLICY "anon_update_scrap_rates"
   USING (true)
   WITH CHECK (true);
 
+CREATE POLICY "anon_insert_scrap_rates"
+  ON public.scrap_rates FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
+
 DROP POLICY IF EXISTS "anon_update_scrap_items" ON public.scrap_items;
+DROP POLICY IF EXISTS "anon_insert_scrap_items" ON public.scrap_items;
 
 CREATE POLICY "anon_update_scrap_items"
   ON public.scrap_items FOR UPDATE
   TO anon, authenticated
   USING (true)
   WITH CHECK (true);
+
+CREATE POLICY "anon_insert_scrap_items"
+  ON public.scrap_items FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
+
