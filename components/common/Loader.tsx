@@ -1,14 +1,11 @@
 /**
  * Loader Component
- * Supports both modern 3D Electric Tempo animation (SweetLoader) and lightweight inline spinner.
+ * Standard lightweight inline and page spinner.
  */
 
 'use client';
 
 import { cn } from '@/lib/utils';
-import { SweetLoader } from './SweetLoader';
-
-export { SweetLoader };
 
 interface LoaderProps {
   /** Optional loading message */
@@ -17,8 +14,6 @@ interface LoaderProps {
   submessage?: string;
   /** Size variant */
   size?: 'sm' | 'md' | 'lg';
-  /** Display variant: 'truck' (default for page loads) or 'spinner' (for small inline elements) */
-  variant?: 'truck' | 'spinner';
   /** Additional CSS classes */
   className?: string;
 }
@@ -31,21 +26,9 @@ const spinnerSizeMap = {
 
 export function Loader({
   message,
-  submessage,
   size = 'md',
-  variant = 'truck',
   className,
 }: LoaderProps) {
-  if (variant === 'truck' || size === 'lg') {
-    return (
-      <SweetLoader
-        message={message || 'Assigning your pickup buddy...'}
-        submessage={submessage}
-        className={className}
-      />
-    );
-  }
-
   return (
     <div className={cn('flex flex-col items-center justify-center gap-3', className)}>
       <div

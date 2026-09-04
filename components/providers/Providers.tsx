@@ -2,14 +2,12 @@
  * Providers
  * Wraps the application with:
  * 1. TanStack React Query Provider
- * 2. Mandatory 3-second Eco-Tempo SiteLoaderProvider
  */
 
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
-import { SiteLoaderProvider } from './SiteLoaderProvider';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -43,9 +41,7 @@ export function Providers({ children }: ProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SiteLoaderProvider>
-        {children}
-      </SiteLoaderProvider>
+      {children}
     </QueryClientProvider>
   );
 }
