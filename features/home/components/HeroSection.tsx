@@ -12,8 +12,26 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Recycle, Leaf, Sparkles, CheckCircle2 } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
 import { PincodeCheckerBar } from './PincodeCheckerBar';
+import { useRates } from '@/features/rates/hooks/useRates';
+import { formatCurrency } from '@/lib/utils';
+import { ITEM_VISUAL_MAP } from '@/constants/scrapItemMedia';
 
 export function HeroSection() {
+  const { data: dbRates = [] } = useRates('all');
+  const heroItems =
+    dbRates.length > 0
+      ? dbRates.slice(0, 4).map((item) => ({
+          name: item.name,
+          rate: `${formatCurrency(item.rates[0]?.price_per_unit ?? 0)}/${item.unit}`,
+          emoji: ITEM_VISUAL_MAP[item.slug]?.emoji || '📦',
+        }))
+      : [
+          { name: 'Newspaper', rate: '₹14/kg', emoji: '📰' },
+          { name: 'Copper', rate: '₹425/kg', emoji: '🔩' },
+          { name: 'Iron', rate: '₹28/kg', emoji: '⚙️' },
+          { name: 'Aluminium', rate: '₹105/kg', emoji: '🥫' },
+        ];
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-background via-surface-container-low to-primary-fixed/20 px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
       {/* Floating decorative elements */}
@@ -131,12 +149,7 @@ export function HeroSection() {
                   <p className="text-xs text-on-surface-variant">Live Bangalore Market Price</p>
                 </div>
                 <div className="space-y-3">
-                  {[
-                    { name: 'Newspaper', rate: '₹14/kg', emoji: '📰' },
-                    { name: 'Copper', rate: '₹425/kg', emoji: '🔩' },
-                    { name: 'Iron', rate: '₹28/kg', emoji: '⚙️' },
-                    { name: 'Aluminium', rate: '₹105/kg', emoji: '🥫' },
-                  ].map((item, index) => (
+                  {heroItems.map((item, index) => (
                     <motion.div
                       key={item.name}
                       initial={{ opacity: 0, x: 20 }}

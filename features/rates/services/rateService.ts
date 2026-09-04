@@ -1,7 +1,8 @@
 /**
  * Rates Service
  * Supabase query functions for fetching scrap rates and categories.
- * Used by TanStack Query hooks for data fetching and caching.
+ * Queries API endpoints with direct Supabase fallback.
+ * Used by TanStack Query hooks for data fetching and caching across pages.
  */
 
 import { createClient } from '@/services/supabase/client';
@@ -46,6 +47,25 @@ export interface Category {
  * Optionally filter by category slug.
  */
 export async function fetchRates(categorySlug?: string): Promise<RateItem[]> {
+  try {
+    const isBrowser = typeof window !== 'undefined';
+    const baseUrl = isBrowser ? '' : (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000');
+    const url =
+      categorySlug && categorySlug !== 'all'
+        ? `${baseUrl}/api/rates?category=${encodeURIComponent(categorySlug)}`
+        : `${baseUrl}/api/rates`;
+
+    const res = await fetch(url, { cache: 'no-store' });
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        return json.data as RateItem[];
+      }
+    }
+  } catch (err) {
+    console.warn('API rates fetch failed, falling back to direct database client:', err);
+  }
+
   const supabase = createClient();
 
   let query = supabase
@@ -66,7 +86,7 @@ export async function fetchRates(categorySlug?: string): Promise<RateItem[]> {
   const { data, error } = await query;
 
   if (error) {
-    console.error('Failed to fetch rates:', error);
+    console.error('Failed to fetch rates from database:', error);
     throw new Error('Failed to fetch rates');
   }
 
@@ -77,6 +97,20 @@ export async function fetchRates(categorySlug?: string): Promise<RateItem[]> {
  * Fetch all active scrap categories.
  */
 export async function fetchCategories(): Promise<Category[]> {
+  try {
+    const isBrowser = typeof window !== 'undefined';
+    const baseUrl = isBrowser ? '' : (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000');
+    const res = await fetch(`${baseUrl}/api/rates/categories`, { cache: 'no-store' });
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        return json.data as Category[];
+      }
+    }
+  } catch (err) {
+    console.warn('API categories fetch failed, falling back to direct database client:', err);
+  }
+
   const supabase = createClient();
 
   const { data, error } = await supabase
@@ -86,7 +120,7 @@ export async function fetchCategories(): Promise<Category[]> {
     .order('sort_order', { ascending: true });
 
   if (error) {
-    console.error('Failed to fetch categories:', error);
+    console.error('Failed to fetch categories from database:', error);
     throw new Error('Failed to fetch categories');
   }
 
