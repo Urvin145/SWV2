@@ -14,7 +14,7 @@ const values = [
   { icon: Clock, title: 'Convenience', description: 'Book a pickup in minutes, from your phone. We come to your doorstep at your chosen time.' },
   { icon: Recycle, title: 'Sustainability', description: 'Every kilogram we collect is properly recycled, keeping waste out of landfills.' },
   { icon: Heart, title: 'Community', description: 'We employ and train local pickup executives, creating dignified jobs in the recycling sector.' },
-  { icon: Leaf, title: 'Impact', description: '500+ tonnes recycled and counting. Together, we are making Bangalore cleaner and greener.' },
+  { icon: Leaf, title: 'Impact', description: '500+ tonnes recycled and counting. Together, we are making Ahmedabad cleaner and greener.' },
 ];
 
 export function AboutContent() {
@@ -35,7 +35,7 @@ export function AboutContent() {
               where anyone can schedule a doorstep pickup, see transparent rates, and get paid fairly for their recyclable waste.
             </p>
             <p>
-              Starting in Bangalore, we&apos;re on a mission to formalize India&apos;s massive informal recycling economy,
+              Starting in Ahmedabad, we&apos;re on a mission to formalize India&apos;s massive informal recycling economy,
               one pickup at a time. By combining technology with trained local executives, we&apos;re making recycling
               convenient, transparent, and rewarding.
             </p>

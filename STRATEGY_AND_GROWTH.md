@@ -62,7 +62,7 @@
 
 ## 2. Go-To-Market (GTM) Strategy
 
-### Phase 1: Soft Launch (Month 1–2) — Bangalore Only
+### Phase 1: Soft Launch (Month 1–2) — Ahmedabad Only
 
 **Target:** 100–200 bookings in first 60 days
 
@@ -79,8 +79,8 @@
 
 | Channel | Action |
 |---------|--------|
-| **Google Ads (Local)** | Target: "sell scrap Bangalore", "kabadiwala near me", "scrap pickup doorstep" |
-| **SEO content marketing** | Blog: "Scrap rates in Bangalore today", "How to dispose e-waste legally" |
+| **Google Ads (Local)** | Target: "sell scrap Ahmedabad", "kabadiwala near me", "scrap pickup doorstep" |
+| **SEO content marketing** | Blog: "Scrap rates in Ahmedabad today", "How to dispose e-waste legally" |
 | **Partnership with waste NGOs** | Co-brand for ESG credibility |
 | **Corporate/IT Park tie-ups** | Offer bulk e-waste disposal for offices (B2B) |
 | **Apartment app listings** | NoBroker, MyGate, ADDA marketplace listings |
@@ -90,8 +90,8 @@
 | Channel | Action |
 |---------|--------|
 | **Performance marketing** | Facebook/Instagram ads to apartment dwellers |
-| **Influencer marketing** | Bangalore lifestyle micro-influencers (5K–50K followers) |
-| **PR/media coverage** | Pitch to YourStory, Inc42, local Bangalore publications |
+| **Influencer marketing** | Ahmedabad lifestyle micro-influencers (5K–50K followers) |
+| **PR/media coverage** | Pitch to YourStory, Inc42, local Ahmedabad publications |
 | **Expand to 2–3 new cities** | Hyderabad, Chennai, Pune (validated by competitor presence) |
 
 ### Target Customer Segments (Priority Order)
@@ -201,10 +201,10 @@ No monitoring           →     Sentry + PostHog           →   DataDog / Grafa
 | Company | Cities | Key Features | Strengths | Weaknesses |
 |---------|--------|-------------|-----------|------------|
 | **The Kabadiwala** | 15+ cities | App-based pickup, rate card, B2B, EPR services | Largest player, strong brand, funded | Generic pricing, slow rural expansion |
-| **ScrapQ** | Hyderabad, Bangalore | "Circulomony" model, community impact, fair trade | Social impact positioning, loyal community | Limited cities, smaller scale |
+| **ScrapQ** | Hyderabad, Ahmedabad | "Circulomony" model, community impact, fair trade | Social impact positioning, loyal community | Limited cities, smaller scale |
 | **ScrapUncle** | Delhi NCR, 5+ cities | Shark Tank featured, app-based, corporate tie-ups | Strong media visibility, investor backing | Delhi-focused, aggressive pricing |
 | **Raddi Connect / RaddiFinder** | Mumbai, Pune | Simple booking, estimated pricing | Easy UX, regional focus | Limited tech, no admin tools visible |
-| **SkrapKart** | Bangalore | Doorstep pickup, digital rates | Local competitor | Small scale |
+| **SkrapKart** | Ahmedabad | Doorstep pickup, digital rates | Local competitor | Small scale |
 
 ### Indirect Competitors
 
@@ -219,7 +219,7 @@ No monitoring           →     Sentry + PostHog           →   DataDog / Grafa
 
 | Advantage | How |
 |-----------|-----|
-| **Hyper-local Bangalore focus** | Deep coverage, faster service, local trust vs national players spreading thin |
+| **Hyper-local Ahmedabad focus** | Deep coverage, faster service, local trust vs national players spreading thin |
 | **Transparent live rate card** | Real-time DB-driven rates visible on website (not hidden in app only) |
 | **No account required** | Guest-mode booking — zero friction vs competitors requiring app download + signup |
 | **Digital scale guarantee** | ISO-certified scales, weigh in front of customer |
@@ -232,7 +232,7 @@ No monitoring           →     Sentry + PostHog           →   DataDog / Grafa
 
 | | Positive | Negative |
 |---|---------|---------|
-| **Internal** | **Strengths:** Modern tech, transparent pricing, guest-mode, Bangalore focus, low overhead | **Weaknesses:** No mobile app yet, single-city, no established brand, no funding |
+| **Internal** | **Strengths:** Modern tech, transparent pricing, guest-mode, Ahmedabad focus, low overhead | **Weaknesses:** No mobile app yet, single-city, no established brand, no funding |
 | **External** | **Opportunities:** $14B+ growing market, govt. push (Swachh Bharat, EPR), underserved apartments, ESG corporate demand | **Threats:** Funded competitors expanding, kabadiwala price war, commodity price volatility |
 
 ---
@@ -246,10 +246,10 @@ No monitoring           →     Sentry + PostHog           →   DataDog / Grafa
 | **1. Cover** | Scrapwala — "Uber for Scrap Collection" | Tagline, logo, founding team |
 | **2. Problem** | ₹1.5L+ Cr scrap traded annually via unorganized kabadiwalas. No transparency, inconsistent pricing, no convenience. 70% of recyclable waste goes to landfill. |
 | **3. Solution** | Doorstep scrap pickup with transparent rates, digital scales, instant UPI payment. Web booking (no app install), guest mode. Admin panel for ops management. |
-| **4. Market Size** | TAM: India waste management = $14.5B (2026), growing 5–7% CAGR. SAM: Urban residential scrap collection = ~$2B. SOM: Bangalore doorstep collection = ~$50M. |
+| **4. Market Size** | TAM: India waste management = $14.5B (2026), growing 5–7% CAGR. SAM: Urban residential scrap collection = ~$2B. SOM: Ahmedabad doorstep collection = ~$50M. |
 | **5. Traction** | Phase 1 MVP live. X bookings in first month. Y repeat rate. Show booking growth chart. |
 | **6. Business Model** | Revenue: Margin on scrap resale (30–60% markup), B2B contracts (offices, societies), future: EPR services. Zero cost to customer. |
-| **7. Competitive Advantage** | No-login guest booking, live web rates, Bangalore hyper-focus, modern tech (SSR), low CAC via WhatsApp/society partnerships. |
+| **7. Competitive Advantage** | No-login guest booking, live web rates, Ahmedabad hyper-focus, modern tech (SSR), low CAC via WhatsApp/society partnerships. |
 | **8. GTM Strategy** | Phase 1: Apartment WhatsApp + RWA partnerships → Phase 2: Google Ads + B2B → Phase 3: Multi-city expansion. |
 | **9. Competition** | 2x2 matrix: (Convenience vs. Transparency). Scrapwala positioned as "High Convenience + High Transparency" vs Kabadiwala (low-low) and Kabadiwala app (med-med). |
 | **10. Team** | Founder backgrounds, domain expertise, tech capability. Advisors if any. |
@@ -361,9 +361,9 @@ Typical margins by category:
 | License | Status | Notes |
 |---------|--------|-------|
 | **GST Registration** | ❓ Required | Mandatory once revenue > ₹20L/year; needed for B2B invoicing |
-| **Trade License** | ❓ Required | BBMP trade license for scrap dealing in Bangalore |
+| **Trade License** | ❓ Required | AMC trade license for scrap dealing in Ahmedabad |
 | **MSME / Udyam Registration** | ❓ Recommended | Benefits: Priority lending, lower interest rates, govt. tenders |
-| **Shop & Establishment Act** | ❓ Required | Register with Karnataka labor department |
+| **Shop & Establishment Act** | ❓ Required | Register with Gujarat labor department |
 | **PAN for Business** | ❓ Required | Needed for GST and banking |
 | **Pollution Control Board NOC** | ❓ May be needed | If operating a warehouse/sorting facility |
 | **E-waste authorization** | ❓ If collecting e-waste | CPCB authorization for e-waste handling |
@@ -404,7 +404,7 @@ Typical margins by category:
 | **Referral system** | "Share → both get ₹50" viral loop | Medium |
 | **Recurring bookings** | Monthly auto-scheduled pickups for societies | Medium |
 | **Invoice/receipt PDF** | Auto-generated after completion; email + WhatsApp | Low |
-| **Multi-language** | Hindi + Kannada for broader Bangalore reach | Medium |
+| **Multi-language** | Hindi + Gujarati for broader Ahmedabad reach | Medium |
 
 ### Phase 3: Expansion & B2B (Month 6–12)
 
@@ -440,7 +440,7 @@ Typical margins by category:
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
 | **Commodity price crash** | Medium | High | Diversify categories; lock in buyer contracts; maintain thin inventory |
-| **Funded competitor enters Bangalore** | High | High | Focus on NPS, referral loop, and apartment partnerships (network effects) |
+| **Funded competitor enters Ahmedabad** | High | High | Focus on NPS, referral loop, and apartment partnerships (network effects) |
 | **Traditional kabadiwala price war** | High | Medium | Compete on convenience + trust, not price alone |
 | **Low repeat rate** | Medium | High | WhatsApp reminders, subscription model, loyalty rewards |
 | **Pickup executive reliability** | Medium | High | Performance bonuses, GPS tracking, customer ratings per driver |

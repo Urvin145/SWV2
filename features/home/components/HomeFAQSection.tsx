@@ -31,8 +31,8 @@ const homeFaqs = [
     a: 'No minimum quantity! Whether you have a single bundle of old newspapers or a complete multi-room garage clearout, our team will pick it up happily.',
   },
   {
-    q: 'What areas in Bangalore do you serve?',
-    a: 'We serve all major neighborhoods across Bangalore including Koramangala, Indiranagar, HSR Layout, Whitefield, Electronic City, Marathahalli, Bellandur, Jayanagar, BTM Layout, Sarjapur, and Hebbal.',
+    q: 'What areas in Ahmedabad do you serve?',
+    a: 'We serve all major neighborhoods across Ahmedabad including Satellite, Bodakdev, Prahlad Nagar, Vastrapur, Thaltej, Bopal, Gota, Maninagar, Navrangpura, Chandkheda, and Motera.',
   },
   {
     q: 'What happens to the scrap after collection?',

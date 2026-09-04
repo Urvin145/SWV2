@@ -40,5 +40,5 @@ export const APP_CONFIG = {
   },
 
   /** Default city for rates */
-  defaultCity: 'Bangalore',
+  defaultCity: 'Ahmedabad',
 } as const;

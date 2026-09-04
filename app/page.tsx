@@ -26,13 +26,13 @@ import { HomeFAQSection } from '@/features/home/components/HomeFAQSection';
 import { CTASection } from '@/features/home/components/CTASection';
 
 export const metadata: Metadata = {
-  title: 'Scrapwala — Sell Your Scrap at the Best Rates | Doorstep Pickup in Bangalore',
+  title: 'Scrapwala — Sell Your Scrap at the Best Rates | Doorstep Pickup in Ahmedabad',
   description:
-    'Schedule a free doorstep scrap pickup in Bangalore. Best market rates for paper, plastic, metal, appliances & e-waste. ISO digital scales, instant UPI payment & 100% green recycling.',
+    'Schedule a free doorstep scrap pickup in Ahmedabad. Best market rates for paper, plastic, metal, appliances & e-waste. ISO digital scales, instant UPI payment & 100% green recycling.',
   openGraph: {
     title: 'Scrapwala — Sell Your Scrap at the Best Rates | Doorstep Pickup',
     description:
-      'Schedule a doorstep scrap pickup in Bangalore. Best market rates for paper, plastic, metal, appliances & e-waste.',
+      'Schedule a doorstep scrap pickup in Ahmedabad. Best market rates for paper, plastic, metal, appliances & e-waste.',
     type: 'website',
     locale: 'en_IN',
   },
@@ -43,17 +43,17 @@ const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   name: 'Scrapwala',
-  description: 'Doorstep scrap collection service with transparent pricing and instant digital payment in Bangalore.',
+  description: 'Doorstep scrap collection service with transparent pricing and instant digital payment in Ahmedabad.',
   url: 'https://scrapwala.com',
   telephone: '+91-XXXXXXXXXX',
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Bangalore',
-    addressRegion: 'Karnataka',
+    addressLocality: 'Ahmedabad',
+    addressRegion: 'Gujarat',
     addressCountry: 'IN',
   },
   priceRange: '₹₹',
-  areaServed: 'Bangalore',
+  areaServed: 'Ahmedabad',
   serviceType: 'Scrap Collection and Recycling',
 };
 

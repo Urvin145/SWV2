@@ -1,7 +1,7 @@
 /**
  * Environmental Impact Section Component
  * Displays real-time ESG metrics and resource savings achieved by Scrapwala's recycling network.
- * Features: Animated counters, glowing eco-cards, resource equivalencies, and Bangalore landfill diversion stats.
+ * Features: Animated counters, glowing eco-cards, resource equivalencies, and Ahmedabad landfill diversion stats.
  */
 
 'use client';
@@ -82,7 +82,7 @@ const impactMetrics = [
     value: 865000,
     suffix: ' kWh',
     detail: 'Clean energy saved through secondary smelting',
-    equivalency: 'Powers 580 Bangalore homes for a year',
+    equivalency: 'Powers 580 Ahmedabad homes for a year',
     color: 'text-amber-700 dark:text-amber-400',
     bgLight: 'bg-amber-50 border-amber-200/60 dark:bg-amber-950/30 dark:border-amber-800/40',
     badge: 'Energy Efficiency',
@@ -118,7 +118,7 @@ export function EnvironmentalImpactSection() {
             <h2 className="font-heading text-3xl font-extrabold text-on-surface sm:text-4xl lg:text-5xl">
               Your scrap powers a{' '}
               <span className="bg-gradient-to-r from-primary to-primary-container bg-clip-text text-transparent">
-                greener Bangalore
+                greener Ahmedabad
               </span>
             </h2>
             <p className="mt-4 text-base leading-relaxed text-on-surface-variant sm:text-lg">

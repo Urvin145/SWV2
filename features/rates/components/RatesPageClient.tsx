@@ -96,7 +96,7 @@ export function RatesPageClient() {
       <AnimatedSection delay={0.3}>
         <div className="mt-12 rounded-xl border border-outline-variant/15 bg-surface-container-low p-6 text-center">
           <p className="text-sm text-on-surface-variant">
-            💡 Rates are based on current Bangalore market prices and are updated regularly.
+            💡 Rates are based on current Ahmedabad market prices and are updated regularly.
             Actual payment depends on quality and quantity of scrap collected.
           </p>
         </div>

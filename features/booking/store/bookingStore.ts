@@ -164,8 +164,8 @@ const initialCustomer: CustomerData = {
   customer_phone: '',
   address_line_1: '',
   address_line_2: '',
-  city: 'Bangalore',
-  state: 'Karnataka',
+  city: 'Ahmedabad',
+  state: 'Gujarat',
   pincode: '',
   customer_notes: '',
 };

@@ -59,7 +59,7 @@ export function ContactForm() {
               <ContactInfo icon={Phone} label="Phone" value="+91-XXXXXXXXXX" href="tel:+91XXXXXXXXXX" />
               <ContactInfo icon={MessageCircle} label="WhatsApp" value="Chat with us" href="https://wa.me/91XXXXXXXXXX" />
               <ContactInfo icon={Mail} label="Email" value="hello@scrapwala.com" href="mailto:hello@scrapwala.com" />
-              <ContactInfo icon={MapPin} label="Location" value="Bangalore, Karnataka" />
+              <ContactInfo icon={MapPin} label="Location" value="Ahmedabad, Gujarat" />
             </div>
 
             <div className="rounded-xl bg-surface-container p-5">

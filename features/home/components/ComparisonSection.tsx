@@ -20,7 +20,7 @@ const comparisonPoints = [
     feature: 'Price Transparency',
     icon: IndianRupee,
     traditional: 'Arbitrary daily guessing, aggressive lowballing',
-    scrapwala: 'Live Bangalore market rates updated daily on website',
+    scrapwala: 'Live Ahmedabad market rates updated daily on website',
   },
   {
     feature: 'Convenience & Time',
@@ -59,7 +59,7 @@ export function ComparisonSection() {
               The Scrapwala Advantage
             </span>
             <h2 className="font-heading text-3xl font-extrabold text-on-surface sm:text-4xl lg:text-5xl">
-              Why thousands of Bangaloreans switched to{' '}
+              Why thousands of Amdavadis switched to{' '}
               <span className="bg-gradient-to-r from-primary to-primary-container bg-clip-text text-transparent">
                 Scrapwala
               </span>

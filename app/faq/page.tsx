@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 const faqs = [
   { q: 'What types of scrap do you collect?', a: 'We collect paper (newspaper, cardboard, books), plastic (PET bottles, HDPE, mixed), metal (iron, copper, aluminium, steel, brass), e-waste (laptops, phones, wires, batteries), glass, old clothes, and tyres/rubber.' },
   { q: 'Is there a minimum quantity required?', a: 'No! We accept any quantity of scrap — even small amounts. Whether it\'s a few newspapers or a full garage cleanout, we\'ll pick it up.' },
-  { q: 'How are the rates determined?', a: 'Our rates are based on current Bangalore market prices and are updated regularly. We guarantee transparent pricing — the rate you see on our website is the rate you get.' },
+  { q: 'How are the rates determined?', a: 'Our rates are based on current Ahmedabad market prices and are updated regularly. We guarantee transparent pricing — the rate you see on our website is the rate you get.' },
   { q: 'How does weighing work?', a: 'Our trained executive carries a calibrated digital weighing scale. Every item is weighed in front of you so there\'s complete transparency.' },
   { q: 'How do I get paid?', a: 'You get paid on the spot after your scrap is weighed. Payment is instant via cash or UPI — your choice.' },
-  { q: 'What areas do you serve?', a: 'We currently serve all major areas in Bangalore including Koramangala, Indiranagar, HSR Layout, Whitefield, Electronic City, Marathahalli, and more. Enter your pincode during booking to check availability.' },
+  { q: 'What areas do you serve?', a: 'We currently serve all major areas in Ahmedabad including Satellite, Bodakdev, Prahlad Nagar, Vastrapur, Thaltej, Bopal, Gota, Maninagar, Navrangpura, and more. Enter your pincode during booking to check availability.' },
   { q: 'Can I cancel or reschedule a pickup?', a: 'Yes! You can cancel a pending or confirmed booking anytime from the "My Orders" page. To reschedule, cancel the current booking and create a new one with your preferred date and time.' },
   { q: 'Do I need to create an account?', a: 'No account needed! Our service works in guest mode. Just enter your phone number and address when booking, and use the same phone number to look up your orders later.' },
   { q: 'What happens to the scrap after pickup?', a: 'All collected scrap is sent to authorized recycling facilities. Paper goes to paper mills, metals to smelters, plastics to recycling plants, and e-waste to certified e-waste processors. Nothing goes to landfill.' },

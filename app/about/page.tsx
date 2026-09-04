@@ -10,7 +10,7 @@ import { AboutContent } from '@/features/static/components/AboutContent';
 export const metadata: Metadata = {
   title: 'About Us — Our Mission & Story | Scrapwala',
   description:
-    'Learn about Scrapwala — our mission to make recycling accessible, transparent, and rewarding for every household and business in Bangalore.',
+    'Learn about Scrapwala — our mission to make recycling accessible, transparent, and rewarding for every household and business in Ahmedabad.',
 };
 
 export default function AboutPage() {

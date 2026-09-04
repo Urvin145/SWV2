@@ -11,7 +11,7 @@ import { RatesPageClient } from '@/features/rates/components/RatesPageClient';
 export const metadata: Metadata = {
   title: 'Scrap Rates — Best Prices for Paper, Plastic, Metal & E-Waste | Scrapwala',
   description:
-    'Check the latest scrap rates in Bangalore for paper, plastic, metal, e-waste, glass and more. Transparent pricing updated regularly. Best market rates guaranteed.',
+    'Check the latest scrap rates in Ahmedabad for paper, plastic, metal, e-waste, glass and more. Transparent pricing updated regularly. Best market rates guaranteed.',
   openGraph: {
     title: 'Scrap Rates — Best Prices for All Categories',
     description:

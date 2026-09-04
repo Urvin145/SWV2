@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
       .insert({
         scrap_item_id: item.id,
         price_per_unit,
-        city: 'Bangalore',
+        city: 'Ahmedabad',
         is_current: true,
         effective_from: new Date().toISOString(),
       });

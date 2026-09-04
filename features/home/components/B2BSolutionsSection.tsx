@@ -31,7 +31,7 @@ const solutions = [
     title: 'IT Parks & Tech Offices',
     badge: 'E-Waste & IT Assets',
     image: '/images/b2b/office-ewaste.jpg',
-    imageAlt: 'IT park office e-waste collection and decommissioning in Bangalore',
+    imageAlt: 'IT park office e-waste collection and decommissioning in Ahmedabad',
     stat: '100% Certified Data Sanitized',
     description:
       'Compliant doorstep decommissioning of laptops, servers, monitors, and networking equipment with official Green Certificate of Destruction.',
@@ -48,7 +48,7 @@ const solutions = [
     title: 'Apartment Societies & RWAs',
     badge: 'Weekend Cleanout Drives',
     image: '/images/b2b/society-drive.jpg',
-    imageAlt: 'Bangalore apartment society scrap collection drive booth',
+    imageAlt: 'Ahmedabad apartment society scrap collection drive booth',
     stat: 'Over 120+ RWAs Enrolled',
     description:
       'Turn-key weekend scrap collection drives for gated communities. We set up certified weighing booths and pay residents directly via UPI.',
@@ -65,7 +65,7 @@ const solutions = [
     title: 'Warehouses & Industrial Units',
     badge: 'Bulk Packaging & Heavy Metals',
     image: '/images/b2b/warehouse-industrial.jpg',
-    imageAlt: 'Modern industrial recycling and scrap logistics warehouse in Bangalore',
+    imageAlt: 'Modern industrial recycling and scrap logistics warehouse in Ahmedabad',
     stat: 'Up to 20-Tonne Daily Lift',
     description:
       'Heavy scrap clearance for e-commerce fulfilment centers, logistics hubs, and factories with certified weighbridge verification.',
@@ -221,7 +221,7 @@ export function B2BSolutionsSection() {
                   Need an EPR compliance partner or regular scrap contract?
                 </h4>
                 <p className="text-sm leading-relaxed text-on-surface-variant">
-                  Speak directly with our Bangalore institutional account manager. We offer GST-compliant invoices,
+                  Speak directly with our Ahmedabad institutional account manager. We offer GST-compliant invoices,
                   customized recycling certificates, weighbridge verification, and customized periodic schedules.
                 </p>
               </div>

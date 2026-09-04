@@ -1,6 +1,6 @@
 /**
  * Pincode Checker Bar Component
- * Quick interactive service availability lookup for Bangalore pincodes.
+ * Quick interactive service availability lookup for Ahmedabad pincodes.
  * Features instant validation, available slots preview, and direct 1-click schedule trigger.
  */
 
@@ -11,23 +11,28 @@ import { MapPin, CheckCircle2, ArrowRight, Sparkles, AlertCircle } from 'lucide-
 import Link from 'next/link';
 import { ROUTES } from '@/constants/routes';
 
-// Popular Bangalore localities with pincodes
-const KNOWN_BANGALORE_PINCODES: Record<string, string> = {
-  '560034': 'Koramangala',
-  '560038': 'Indiranagar',
-  '560102': 'HSR Layout',
-  '560066': 'Whitefield',
-  '560100': 'Electronic City',
-  '560037': 'Marathahalli',
-  '560103': 'Bellandur',
-  '560011': 'Jayanagar',
-  '560076': 'BTM Layout',
-  '560035': 'Sarjapur Road',
-  '560024': 'Hebbal',
-  '560064': 'Yelahanka',
-  '560010': 'Rajajinagar',
-  '560085': 'Banashankari',
-  '560003': 'Malleshwaram',
+// Popular Ahmedabad localities with pincodes
+const KNOWN_AHMEDABAD_PINCODES: Record<string, string> = {
+  '380001': 'Lal Darwaja',
+  '380004': 'Maninagar',
+  '380006': 'Navrangpura',
+  '380007': 'Paldi',
+  '380009': 'Ambawadi',
+  '380013': 'Shahibaug',
+  '380015': 'Satellite',
+  '380051': 'Vastrapur',
+  '380052': 'Bodakdev',
+  '380054': 'Thaltej',
+  '380058': 'Prahlad Nagar',
+  '380059': 'Jodhpur',
+  '382330': 'Naroda',
+  '382345': 'Chandkheda',
+  '382350': 'Motera',
+  '382418': 'Gota',
+  '382421': 'Sola',
+  '382424': 'Science City',
+  '382470': 'Bopal',
+  '382481': 'South Bopal',
 };
 
 export function PincodeCheckerBar() {
@@ -40,8 +45,8 @@ export function PincodeCheckerBar() {
     setPincode(cleaned);
 
     if (cleaned.length === 6) {
-      if (cleaned.startsWith('560')) {
-        const area = KNOWN_BANGALORE_PINCODES[cleaned] || 'Bangalore Area';
+      if (cleaned.startsWith('380') || cleaned.startsWith('382') || cleaned.startsWith('383')) {
+        const area = KNOWN_AHMEDABAD_PINCODES[cleaned] || 'Ahmedabad Area';
         setAreaName(area);
         setStatus('valid');
       } else {
@@ -63,7 +68,7 @@ export function PincodeCheckerBar() {
               type="text"
               value={pincode}
               onChange={(e) => handleCheck(e.target.value)}
-              placeholder="Enter 6-digit Bangalore Pincode (e.g. 560034)"
+              placeholder="Enter 6-digit Ahmedabad Pincode (e.g. 380015)"
               className="w-full bg-transparent text-sm font-medium text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none"
               maxLength={6}
             />
@@ -95,7 +100,7 @@ export function PincodeCheckerBar() {
         {status === 'invalid' && (
           <div className="mt-2 flex items-center gap-1.5 rounded-xl bg-amber-50 px-3.5 py-2 text-xs font-semibold text-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
             <AlertCircle className="h-4 w-4 text-amber-600" />
-            <span>We currently operate exclusively in Bangalore (Pincodes starting with 560XXX).</span>
+            <span>We currently operate exclusively in Ahmedabad (Pincodes starting with 380/382/383).</span>
           </div>
         )}
       </div>

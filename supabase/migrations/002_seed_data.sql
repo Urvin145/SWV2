@@ -92,32 +92,32 @@ ON CONFLICT (slug) DO NOTHING;
 -- ============================================================================
 INSERT INTO scrap_rates (scrap_item_id, price_per_unit, city) VALUES
   -- Paper
-  ('b1000000-0000-0000-0000-000000000001', 14.00, 'Bangalore'),  -- Newspaper
-  ('b1000000-0000-0000-0000-000000000002', 8.00, 'Bangalore'),   -- Cardboard
-  ('b1000000-0000-0000-0000-000000000003', 12.00, 'Bangalore'),  -- Magazines
-  ('b1000000-0000-0000-0000-000000000004', 10.00, 'Bangalore'),  -- Office Paper
+  ('b1000000-0000-0000-0000-000000000001', 14.00, 'Ahmedabad'),  -- Newspaper
+  ('b1000000-0000-0000-0000-000000000002', 8.00, 'Ahmedabad'),   -- Cardboard
+  ('b1000000-0000-0000-0000-000000000003', 12.00, 'Ahmedabad'),  -- Magazines
+  ('b1000000-0000-0000-0000-000000000004', 10.00, 'Ahmedabad'),  -- Office Paper
   -- Plastic
-  ('b1000000-0000-0000-0000-000000000005', 10.00, 'Bangalore'),  -- PET Bottles
-  ('b1000000-0000-0000-0000-000000000006', 12.00, 'Bangalore'),  -- HDPE
-  ('b1000000-0000-0000-0000-000000000007', 15.00, 'Bangalore'),  -- Hard Plastic
-  ('b1000000-0000-0000-0000-000000000008', 5.00, 'Bangalore'),   -- Plastic Mix
+  ('b1000000-0000-0000-0000-000000000005', 10.00, 'Ahmedabad'),  -- PET Bottles
+  ('b1000000-0000-0000-0000-000000000006', 12.00, 'Ahmedabad'),  -- HDPE
+  ('b1000000-0000-0000-0000-000000000007', 15.00, 'Ahmedabad'),  -- Hard Plastic
+  ('b1000000-0000-0000-0000-000000000008', 5.00, 'Ahmedabad'),   -- Plastic Mix
   -- Metal
-  ('b1000000-0000-0000-0000-000000000009', 28.00, 'Bangalore'),  -- Iron
-  ('b1000000-0000-0000-0000-000000000010', 425.00, 'Bangalore'), -- Copper
-  ('b1000000-0000-0000-0000-000000000011', 105.00, 'Bangalore'), -- Aluminium
-  ('b1000000-0000-0000-0000-000000000012', 40.00, 'Bangalore'),  -- Steel
-  ('b1000000-0000-0000-0000-000000000013', 305.00, 'Bangalore'), -- Brass
+  ('b1000000-0000-0000-0000-000000000009', 28.00, 'Ahmedabad'),  -- Iron
+  ('b1000000-0000-0000-0000-000000000010', 425.00, 'Ahmedabad'), -- Copper
+  ('b1000000-0000-0000-0000-000000000011', 105.00, 'Ahmedabad'), -- Aluminium
+  ('b1000000-0000-0000-0000-000000000012', 40.00, 'Ahmedabad'),  -- Steel
+  ('b1000000-0000-0000-0000-000000000013', 305.00, 'Ahmedabad'), -- Brass
   -- E-Waste
-  ('b1000000-0000-0000-0000-000000000014', 200.00, 'Bangalore'), -- Laptops
-  ('b1000000-0000-0000-0000-000000000015', 50.00, 'Bangalore'),  -- Mobile Phones
-  ('b1000000-0000-0000-0000-000000000016', 30.00, 'Bangalore'),  -- Wires
-  ('b1000000-0000-0000-0000-000000000017', 75.00, 'Bangalore'),  -- Batteries
+  ('b1000000-0000-0000-0000-000000000014', 200.00, 'Ahmedabad'), -- Laptops
+  ('b1000000-0000-0000-0000-000000000015', 50.00, 'Ahmedabad'),  -- Mobile Phones
+  ('b1000000-0000-0000-0000-000000000016', 30.00, 'Ahmedabad'),  -- Wires
+  ('b1000000-0000-0000-0000-000000000017', 75.00, 'Ahmedabad'),  -- Batteries
   -- Glass
-  ('b1000000-0000-0000-0000-000000000018', 2.00, 'Bangalore'),   -- Glass Bottles
-  ('b1000000-0000-0000-0000-000000000019', 1.50, 'Bangalore'),   -- Window Glass
+  ('b1000000-0000-0000-0000-000000000018', 2.00, 'Ahmedabad'),   -- Glass Bottles
+  ('b1000000-0000-0000-0000-000000000019', 1.50, 'Ahmedabad'),   -- Window Glass
   -- Others
-  ('b1000000-0000-0000-0000-000000000020', 3.00, 'Bangalore'),   -- Old Clothes
-  ('b1000000-0000-0000-0000-000000000021', 8.00, 'Bangalore');   -- Tyres
+  ('b1000000-0000-0000-0000-000000000020', 3.00, 'Ahmedabad'),   -- Old Clothes
+  ('b1000000-0000-0000-0000-000000000021', 8.00, 'Ahmedabad');   -- Tyres
 
 -- ============================================================================
 -- 4. PICKUP SLOTS (4 time windows)
@@ -143,10 +143,10 @@ INSERT INTO blog_posts (title, slug, excerpt, content, author_name, is_published
   now() - INTERVAL '7 days'
 ),
 (
-  'How Scrapwala is Making Recycling Easy in Bangalore',
-  'how-scrapwala-is-making-recycling-easy-in-bangalore',
-  'Learn how Scrapwala is transforming doorstep scrap collection in Bangalore with technology and fair pricing.',
-  E'# How Scrapwala is Making Recycling Easy in Bangalore\n\nRecycling shouldn''t be hard. But for most Bangalore residents, selling scrap means:\n- Waiting for the kabadiwala who never shows up\n- Getting lowballed on prices\n- Having no transparency on rates\n\n## The Scrapwala Difference\n\nWe built Scrapwala to solve these problems:\n\n### Transparent Pricing\nOur rates are published online and updated regularly. No haggling, no surprises.\n\n### Scheduled Pickups\nBook a pickup at your convenience. Choose your date and time slot, and our trained executive arrives on time.\n\n### Fair Payment\nWe weigh your scrap on a digital scale right at your doorstep. You see the weight, you see the rate, you get paid instantly.\n\n### Professional Service\nOur collection executives are trained, uniformed, and courteous. They handle the heavy lifting.\n\n---\n\n**Join 10,000+ happy customers** who have already made the switch to Scrapwala.',
+  'How Scrapwala is Making Recycling Easy in Ahmedabad',
+  'how-scrapwala-is-making-recycling-easy-in-ahmedabad',
+  'Learn how Scrapwala is transforming doorstep scrap collection in Ahmedabad with technology and fair pricing.',
+  E'# How Scrapwala is Making Recycling Easy in Ahmedabad\n\nRecycling shouldn''t be hard. But for most Ahmedabad residents, selling scrap means:\n- Waiting for the kabadiwala who never shows up\n- Getting lowballed on prices\n- Having no transparency on rates\n\n## The Scrapwala Difference\n\nWe built Scrapwala to solve these problems:\n\n### Transparent Pricing\nOur rates are published online and updated regularly. No haggling, no surprises.\n\n### Scheduled Pickups\nBook a pickup at your convenience. Choose your date and time slot, and our trained executive arrives on time.\n\n### Fair Payment\nWe weigh your scrap on a digital scale right at your doorstep. You see the weight, you see the rate, you get paid instantly.\n\n### Professional Service\nOur collection executives are trained, uniformed, and courteous. They handle the heavy lifting.\n\n---\n\n**Join 10,000+ happy customers** who have already made the switch to Scrapwala.',
   'Scrapwala Team',
   true,
   now() - INTERVAL '14 days'

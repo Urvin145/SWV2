@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         .insert({
           scrap_item_id: u.scrap_item_id,
           price_per_unit: price,
-          city: u.city || 'Bangalore',
+          city: u.city || 'Ahmedabad',
           is_current: true,
           effective_from: now,
         });

@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     'plastic scrap',
     'metal scrap',
     'e-waste',
-    'Bangalore scrap pickup',
+    'Ahmedabad scrap pickup',
   ],
   authors: [{ name: APP_CONFIG.name }],
   creator: APP_CONFIG.name,

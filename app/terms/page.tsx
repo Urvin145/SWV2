@@ -54,7 +54,7 @@ export default function TermsPage() {
           </Section>
 
           <Section title="7. Governing Law">
-            <p>These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Bangalore, Karnataka.</p>
+            <p>These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Ahmedabad, Gujarat.</p>
           </Section>
 
           <Section title="8. Contact">

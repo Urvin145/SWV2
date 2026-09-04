@@ -27,7 +27,7 @@ export function RatesPreviewSection() {
             <div>
               <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
                 <Sparkles className="h-3.5 w-3.5" />
-                <span>Live Bangalore Rates</span>
+                <span>Live Ahmedabad Rates</span>
               </div>
               <h2 className="font-heading text-3xl font-extrabold text-on-surface sm:text-4xl">
                 Current Scrap Rates

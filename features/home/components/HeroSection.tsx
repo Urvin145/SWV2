@@ -73,7 +73,7 @@ export function HeroSection() {
               className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary"
             >
               <Recycle className="h-4 w-4" />
-              <span>Bangalore&apos;s #1 Online Scrap Pickup Service</span>
+              <span>Ahmedabad&apos;s #1 Online Scrap Pickup Service</span>
             </motion.div>
 
             <h1 className="font-heading text-4xl font-bold leading-[1.1] tracking-tight text-on-surface sm:text-5xl lg:text-6xl">
@@ -126,7 +126,7 @@ export function HeroSection() {
                 ))}
               </div>
               <span>
-                Trusted by <strong className="text-on-surface">10,000+</strong> homes & businesses in Bangalore
+                Trusted by <strong className="text-on-surface">10,000+</strong> homes & businesses in Ahmedabad
               </span>
             </motion.div>
           </motion.div>
@@ -146,7 +146,7 @@ export function HeroSection() {
                     <Recycle className="h-10 w-10 text-on-primary" />
                   </div>
                   <h3 className="text-xl font-bold text-on-surface">Today&apos;s Verified Rates</h3>
-                  <p className="text-xs text-on-surface-variant">Live Bangalore Market Price</p>
+                  <p className="text-xs text-on-surface-variant">Live Ahmedabad Market Price</p>
                 </div>
                 <div className="space-y-3">
                   {heroItems.map((item, index) => (

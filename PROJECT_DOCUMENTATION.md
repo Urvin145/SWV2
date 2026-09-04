@@ -1,6 +1,6 @@
 # 🟢 Scrapwala — Project Documentation
 
-> **"Uber for Scrap Collection"** — Doorstep scrap pickup platform for Bangalore  
+> **"Uber for Scrap Collection"** — Doorstep scrap pickup platform for Ahmedabad  
 > **Version:** 0.1.0 · **Framework:** Next.js 16 (App Router) · **Database:** Supabase (PostgreSQL)  
 > **Repository:** [github.com/Urvin145/SWV2](https://github.com/Urvin145/SWV2)
 
@@ -28,7 +28,7 @@
 
 ## 1. Project Overview
 
-Scrapwala is a **doorstep scrap collection service** platform targeting Bangalore. Customers can:
+Scrapwala is a **doorstep scrap collection service** platform targeting Ahmedabad. Customers can:
 - Browse live scrap rates (paper, plastic, metal, e-waste, glass, etc.)
 - Book a free doorstep pickup via a 4-step wizard
 - Track orders by phone number or booking number (guest mode, no account required)
@@ -232,7 +232,7 @@ scrapwala/
                              │ id (PK)            │
                              │ scrap_item_id (FK) │
                              │ price_per_unit     │
-                             │ city (Bangalore)   │
+                             │ city (Ahmedabad)   │
                              │ effective_from     │
                              │ effective_to       │
                              │ is_current (bool)  │
