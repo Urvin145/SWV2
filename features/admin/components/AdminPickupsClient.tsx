@@ -426,10 +426,30 @@ export function AdminPickupsClient() {
                     </div>
 
                     <div className="hidden text-right sm:block">
-                      <p className="text-sm font-semibold text-on-surface">
-                        {b.estimated_value ? `₹${Number(b.estimated_value).toLocaleString('en-IN')}` : '—'}
-                      </p>
-                      <p className="text-[10px] text-on-surface-variant">est. value</p>
+                      {b.actual_value != null ? (
+                        <>
+                          <p className="text-base font-extrabold text-emerald-600">
+                            ₹{Number(b.actual_value).toLocaleString('en-IN')}
+                          </p>
+                          <p className="text-[10px] font-semibold text-emerald-700">Total Payout</p>
+                        </>
+                      ) : b.estimated_value && b.estimated_value > 50 ? (
+                        <>
+                          <p className="text-sm font-semibold text-on-surface">
+                            ₹{Number(b.estimated_value).toLocaleString('en-IN')}
+                          </p>
+                          <p className="text-[10px] text-on-surface-variant">est. value</p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-sm font-semibold text-primary">
+                            {b.truck_size ? b.truck_size.replace(/\(.*\)/, '').trim() : 'Doorstep Weigh'}
+                          </p>
+                          <p className="text-[10px] text-on-surface-variant">
+                            {b.estimated_price_range ? b.estimated_price_range : 'Pending Weighing'}
+                          </p>
+                        </>
+                      )}
                     </div>
 
                     {isExpanded ? (
@@ -467,16 +487,30 @@ export function AdminPickupsClient() {
                         )}
                       </div>
 
-                      {/* Items */}
+                      {/* Items & Total Calculation */}
                       <div>
-                        <p className="mb-2 text-xs font-medium text-on-surface-variant">Items</p>
+                        <div className="mb-2 flex items-center justify-between">
+                          <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                            Items Breakdown ({b.items.length})
+                          </p>
+                          {b.status === 'completed' || b.actual_value != null ? (
+                            <span className="rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2.5 py-0.5 text-[11px] font-bold">
+                              ✓ Digital Scales Weighed
+                            </span>
+                          ) : (
+                            <span className="rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 px-2.5 py-0.5 text-[11px] font-bold">
+                              Doorstep Weighing Pending
+                            </span>
+                          )}
+                        </div>
+
                         <div className="space-y-1.5">
                           {b.items.map((item) => {
                             const isMeasured = item.actual_weight != null;
                             return (
                               <div
                                 key={item.id}
-                                className="flex items-center justify-between rounded-lg bg-surface-container-lowest px-3 py-2 text-sm"
+                                className="flex items-center justify-between rounded-lg bg-surface-container-lowest px-3.5 py-2.5 text-sm border border-outline-variant/10"
                               >
                                 <div>
                                   <span className="font-medium text-on-surface">{item.scrap_item.name}</span>
@@ -488,16 +522,17 @@ export function AdminPickupsClient() {
                                   {isMeasured ? (
                                     <>
                                       <p className="text-on-surface font-medium">
-                                        {item.actual_weight} {item.scrap_item.unit} × ₹{item.rate_applied}
+                                        <span className="font-bold text-on-surface">{item.actual_weight} {item.scrap_item.unit}</span>
+                                        {' × ₹'}{item.rate_applied}
                                       </p>
-                                      <p className="font-bold text-primary">₹{item.subtotal}</p>
+                                      <p className="font-extrabold text-emerald-600 text-sm">₹{Number(item.subtotal).toLocaleString('en-IN')}</p>
                                     </>
                                   ) : (
                                     <>
                                       <p className="text-primary font-semibold">
                                         Rate: ₹{item.rate_applied} / {item.scrap_item.unit}
                                       </p>
-                                      <p className="text-on-surface-variant text-[11px]">Doorstep weighing</p>
+                                      <p className="text-on-surface-variant text-[11px]">Doorstep digital weighing</p>
                                     </>
                                   )}
                                 </div>
@@ -505,6 +540,50 @@ export function AdminPickupsClient() {
                             );
                           })}
                         </div>
+
+                        {/* Calculation & Total Box */}
+                        {b.status === 'completed' || b.actual_value != null ? (
+                          <div className="mt-3 rounded-xl bg-emerald-50 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800/40 p-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                              <div>
+                                <p className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
+                                  Total Doorstep Calculation
+                                </p>
+                                <p className="text-xs text-on-surface-variant mt-1">
+                                  {b.items
+                                    .filter((i) => i.actual_weight != null)
+                                    .map((i) => `${i.actual_weight} ${i.scrap_item.unit} × ₹${i.rate_applied} (₹${i.subtotal})`)
+                                    .join(' + ')}
+                                </p>
+                                {b.weight_total ? (
+                                  <p className="text-xs font-semibold text-on-surface mt-1.5">
+                                    Total Weight: <span className="text-primary font-bold">{b.weight_total} kg</span>
+                                  </p>
+                                ) : null}
+                              </div>
+                              <div className="sm:text-right border-t border-emerald-200/60 dark:border-emerald-800/40 sm:border-0 pt-2 sm:pt-0">
+                                <p className="text-xs font-medium text-emerald-900 dark:text-emerald-300">Total Payout Calculated</p>
+                                <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
+                                  ₹{Number(b.actual_value ?? b.items.reduce((s, i) => s + (Number(i.subtotal) || 0), 0)).toLocaleString('en-IN')}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="mt-3 rounded-xl bg-surface-container/60 border border-outline-variant/15 p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                            <div className="text-xs">
+                              <p className="font-bold text-on-surface">Doorstep Digital Scale Calculation</p>
+                              <p className="text-on-surface-variant mt-0.5">
+                                Rates are locked. Exact total payout will be calculated when the pickup agent records actual weights.
+                              </p>
+                            </div>
+                            <div className="sm:text-right shrink-0">
+                              <span className="inline-block rounded-md bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+                                Vehicle: {b.truck_size ?? b.estimated_price_range ?? 'Standard'}
+                              </span>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       {/* Actions */}
