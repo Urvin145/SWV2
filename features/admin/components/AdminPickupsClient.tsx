@@ -292,7 +292,11 @@ export function AdminPickupsClient() {
       const json = await res.json();
       if (json.success) {
         await fetchBookings();
+      } else {
+        alert(json.error || 'Failed to update booking status');
       }
+    } catch {
+      alert('Network error while updating booking status');
     } finally {
       setActionLoading(null);
     }
